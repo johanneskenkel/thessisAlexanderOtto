@@ -5,15 +5,13 @@ public class Person {
     private String firstName;
     private String lastName;
     private int age;
-    private String birthDay;
     private String addDate;
 
-    public Person(int id, String firstName, String lastName, int age, String birthDay, String addDate) {
+    public Person(int id, String firstName, String lastName, int age, String addDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.birthDay = birthDay;
         this.addDate = addDate;
     }
 
@@ -49,14 +47,6 @@ public class Person {
         this.age = age;
     }
 
-    public String getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
-    }
-
     public String getAddDate() {
         return addDate;
     }
@@ -88,11 +78,6 @@ public class Person {
             return false;
         if (age != other.age)
             return false;
-        if (birthDay == null) {
-            if (other.birthDay != null)
-                return false;
-        } else if (!birthDay.equals(other.birthDay))
-            return false;
         if (addDate == null) {
             if (other.addDate != null)
                 return false;
@@ -109,7 +94,6 @@ public class Person {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + age;
-        result = prime * result + ((birthDay == null) ? 0 : birthDay.hashCode());
         result = prime * result + ((addDate == null) ? 0 : addDate.hashCode());
         return result;
     }
