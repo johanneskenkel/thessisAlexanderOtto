@@ -5,14 +5,14 @@ public class Person {
     private String firstName;
     private String lastName;
     private int age;
-    private String addDate;
+    private String timestamp;
 
-    public Person(int id, String firstName, String lastName, int age, String addDate) {
+    public Person(int id, String firstName, String lastName, int age, String timestamp) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.addDate = addDate;
+        this.timestamp = timestamp;
     }
 
     public int getId() {
@@ -47,12 +47,12 @@ public class Person {
         this.age = age;
     }
 
-    public String getAddDate() {
-        return addDate;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setAddDate(String addDate) {
-        this.addDate = addDate;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override
@@ -78,10 +78,10 @@ public class Person {
             return false;
         if (age != other.age)
             return false;
-        if (addDate == null) {
-            if (other.addDate != null)
+        if (timestamp == null) {
+            if (other.timestamp != null)
                 return false;
-        } else if (!addDate.equals(other.addDate))
+        } else if (!timestamp.equals(other.timestamp))
             return false;
         return true;
     }
@@ -94,7 +94,7 @@ public class Person {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + age;
-        result = prime * result + ((addDate == null) ? 0 : addDate.hashCode());
+        result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
         return result;
     }
 }
