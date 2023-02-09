@@ -1,7 +1,9 @@
 package org.hbrs.thesis;
 
-import org.hbrs.thesis.controller.PersonController;
 import static spark.Spark.port;
+
+import org.hbrs.thesis.config.ApplicationConfig;
+import org.hbrs.thesis.controller.PersonController;
 public final class App {
     private App() {
     }
@@ -11,9 +13,11 @@ public final class App {
      * @param args The arguments of the program.
      */
     public static void main(String[] args) {
-        port(8081);
-        PersonController.generatePersons();
-        PersonController.getAllPersons();
-        PersonController.removeTable();
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        port(applicationConfig.getApplicationPort());
+        PersonController personController = new PersonController();
+        personController.generatePersons();
+        personController.getAllPersons();
+        personController.removeTable();
     }
 }

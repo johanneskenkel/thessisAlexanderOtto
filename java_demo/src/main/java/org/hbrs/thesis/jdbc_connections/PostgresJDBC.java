@@ -7,10 +7,14 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.hbrs.thesis.config.ApplicationConfig;
+
 public class PostgresJDBC {
     private static Logger logger = Logger.getLogger(PostgresJDBC.class.getName());
+    private ApplicationConfig applicationConfig;
 
     public PostgresJDBC() {
+        this.applicationConfig = new ApplicationConfig();
         try {
             createPersonsTable();
         } catch (SQLException ex) {
@@ -19,13 +23,13 @@ public class PostgresJDBC {
     }
 
     public Connection createPostgresConnection() {
-        String url = "jdbc:postgresql://localhost/postgres";
-        Properties props = new Properties();
-        props.setProperty("user", "postgres");
-        props.setProperty("password", "12345");
+        String url = applicationConfig.getPostgresUrl();
+        Properties dbProperties = new Properties();
+        dbProperties.setProperty("user", applicationConfig.getPostgresUsername());
+        dbProperties.setProperty("password", applicationConfig.getPostgresPassword());
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, props);
+            connection = DriverManager.getConnection(url, dbProperties);
         } catch (SQLException ex) {
             logger.warning("Connection to postgres DB failed with the message: " + ex.getMessage());
         }
@@ -33,15 +37,16 @@ public class PostgresJDBC {
         return connection;
     }
 
-    private void createPersonsTable() throws SQLException {
+    protected void createPersonsTable() throws SQLException {
         try (Connection connection = createPostgresConnection()) {
             if (connection != null) {
-                PreparedStatement prepareStatement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS persons (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), age INTEGER, date TIMESTAMP)");
+                try (PreparedStatement prepareStatement = connection.prepareStatement(
+                        "CREATE TABLE IF NOT EXISTS " + applicationConfig.getPostgresTable() + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), age INTEGER, date TIMESTAMP)")) {
 
-                prepareStatement.executeQuery();
+                    prepareStatement.executeUpdate();
+                }
             } else {
-                logger.warning("Couldn't create table, because the connection was null");
+                logger.warning("Couldn't create the " + applicationConfig.getPostgresTable() + " table, because the connection was null");
             }
         }
     }

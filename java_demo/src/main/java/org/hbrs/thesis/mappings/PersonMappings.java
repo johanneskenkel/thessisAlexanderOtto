@@ -7,6 +7,7 @@ import org.hbrs.thesis.dto.PersonDto;
 import org.hbrs.thesis.model.Person;
 
 public class PersonMappings {
+    private PersonMappings() {}
     public static List<PersonDto> mapPersonListToPersonDtoList(List<Person> personList) {
         List<PersonDto> personDtoList = new ArrayList<>();
         personList.forEach(person -> personDtoList.add(mapPersonToPersonDto(person)));

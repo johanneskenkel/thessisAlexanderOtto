@@ -14,20 +14,23 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 public class PersonController {
-    private PersonController() {
+    PersonService personService;
+
+    public PersonController() {
+        this.personService = new PersonService();
     }
 
-    public static void getAllPersons() {
+    public void getAllPersons() {
         Gson gson = new Gson();
-        get("/api/persons", (req, res) -> PersonMappings.mapPersonListToPersonDtoList(PersonService.getAllPersons()),
+        get("/api/persons", (req, res) -> PersonMappings.mapPersonListToPersonDtoList(personService.getAllPersons()),
                 gson::toJson);
     }
 
-    public static void generatePersons() {
+    public void generatePersons() {
         Gson gson = new Gson();
         post("/api/persons/generate", (req, res) -> {
             GeneratePersonsDto generatePersonsDto = gson.fromJson(req.body(), GeneratePersonsDto.class);
-            return PersonService.generatePersons(generatePersonsDto.getNumber());
+            return personService.generatePersonsToDB(generatePersonsDto.getNumber());
         }, gson::toJson);
         exception(JsonSyntaxException.class, (exception, req, res) -> {
             res.type("application/json");
@@ -38,8 +41,8 @@ public class PersonController {
         });
     }
 
-    public static void removeTable() {
+    public void removeTable() {
         Gson gson = new Gson();
-        delete("/api/persons/delete", (req, res) -> gson.toJson(PersonService.removePersonTable()));
+        delete("/api/persons/delete", (req, res) -> gson.toJson(personService.removeDBTable()));
     }
 }
