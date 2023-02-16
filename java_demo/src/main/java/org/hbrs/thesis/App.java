@@ -3,6 +3,7 @@ package org.hbrs.thesis;
 import static spark.Spark.port;
 
 import org.hbrs.thesis.config.ApplicationConfig;
+import org.hbrs.thesis.controller.MetricsController;
 import org.hbrs.thesis.controller.PersonController;
 public final class App {
     private App() {
@@ -15,9 +16,12 @@ public final class App {
     public static void main(String[] args) {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         port(applicationConfig.getApplicationPort());
+
         PersonController personController = new PersonController();
         personController.generatePersons();
         personController.getAllPersons();
         personController.removeTable();
+        MetricsController metricsController = new MetricsController();
+        metricsController.exposePrometheusMetrics();
     }
 }

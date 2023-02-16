@@ -24,6 +24,7 @@ public class PersonController {
         Gson gson = new Gson();
         get("/api/persons", (req, res) -> PersonMappings.mapPersonListToPersonDtoList(personService.getAllPersons()),
                 gson::toJson);
+
     }
 
     public void generatePersons() {
