@@ -1,10 +1,25 @@
-package org.hbrs.thesis.model;
+package org.hbrs.thesis.springboot_demo.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "persons")
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "firstname", nullable = false)
     private String firstName;
+    @Column(name = "lastname", nullable = false)
     private String lastName;
+    @Column(name = "age", nullable = false)
     private int age;
+    @Column(name = "timestamp", nullable = false)
     private String timestamp;
 
     public Person(long id, String firstName, String lastName, int age, String timestamp) {

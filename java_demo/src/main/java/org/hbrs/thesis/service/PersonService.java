@@ -1,7 +1,9 @@
 package org.hbrs.thesis.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.hbrs.thesis.config.ApplicationConfig;
 import org.hbrs.thesis.dao.PersonDao;
@@ -9,8 +11,8 @@ import org.hbrs.thesis.dto.MessageDto;
 import org.hbrs.thesis.model.Person;
 
 public class PersonService {
-    PersonDao personDao;
-    ApplicationConfig applicationConfig;
+    private PersonDao personDao;
+    private ApplicationConfig applicationConfig;
 
     public PersonService() {
         personDao = new PersonDao();
@@ -29,5 +31,15 @@ public class PersonService {
     public MessageDto removeDBTable() throws SQLException {
         personDao.dropDBTable();
         return new MessageDto("You have successfully deleted the " + applicationConfig.getPostgresTable() + " table");
+    }
+
+    public MessageDto randomCalculation() {
+        double res = 0;
+        Random random = new Random();
+        for(int i=0; i<1e9; ++i) {
+             res = random.nextDouble()+0.1 / random.nextDouble() + 0.1;
+        }
+        
+        return new MessageDto("Random Success " + res);
     }
 }

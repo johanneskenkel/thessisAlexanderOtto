@@ -21,6 +21,7 @@ public final class App {
         personController.generatePersons();
         personController.getAllPersons();
         personController.removeTable();
+        personController.randomCaclulation();
         MetricsController metricsController = new MetricsController();
         metricsController.exposePrometheusMetrics();
     }

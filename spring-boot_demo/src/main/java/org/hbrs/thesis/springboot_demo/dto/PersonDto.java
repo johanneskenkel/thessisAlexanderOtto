@@ -1,4 +1,4 @@
-package org.hbrs.thesis.dto;
+package org.hbrs.thesis.springboot_demo.dto;
 
 public class PersonDto {
     private long id;

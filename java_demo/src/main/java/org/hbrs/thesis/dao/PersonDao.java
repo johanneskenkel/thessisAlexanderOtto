@@ -19,7 +19,8 @@ import com.github.javafaker.Faker;
 public class PersonDao {
     private static Random random = new Random();
     private ApplicationConfig applicationConfig;
-    PostgresJDBC postgresJDBC;
+    private PostgresJDBC postgresJDBC;
+    private Faker faker = new Faker();
 
     public PersonDao() {
         this.applicationConfig = new ApplicationConfig();
@@ -27,23 +28,23 @@ public class PersonDao {
     }
 
     public void insertNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) throws SQLException {
-        Faker faker = new Faker();
-        String sqlStatement = "INSERT INTO " + applicationConfig.getPostgresTable() + " (firstName, lastName, age, date) VALUES (?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO " + applicationConfig.getPostgresTable() + " (firstName, lastName, age, timestamp) VALUES (?, ?, ?, ?)";
         try (Connection connection = postgresJDBC.createPostgresConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 for (long i = 0; i < numberOfPersonsToGenerate; ++i) {
-                    insertToDB(generatePerson(faker, random), preparedStatement);
+                    insertToDB(generatePerson(), preparedStatement);
                 }
                 preparedStatement.executeBatch();
             }
         }
     }
 
-    private Person generatePerson(Faker faker, Random random) {
+    private Person generatePerson() {
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
         int age = 18 + random.nextInt(83);
-        return new Person(0, firstName, lastName, age, null);
+        String timestamp = Instant.now().toString();
+        return new Person(0, firstName, lastName, age, timestamp);
     }
 
     private static PreparedStatement insertToDB(Person person, PreparedStatement preparedStatement)
@@ -51,13 +52,14 @@ public class PersonDao {
         preparedStatement.setString(1, person.getFirstName());
         preparedStatement.setString(2, person.getLastName());
         preparedStatement.setInt(3, person.getAge());
-        preparedStatement.setTimestamp(4, Timestamp.from(Instant.now()));
+        preparedStatement.setTimestamp(4, Timestamp.valueOf(person.getTimestamp()));
+
         preparedStatement.addBatch();
         return preparedStatement;
     }
 
     public List<Person> getAllFromDb() throws SQLException {
-        String sqlStatement = "SELECT id, firstName, lastName, age, date FROM " + applicationConfig.getPostgresTable();
+        String sqlStatement = "SELECT id, firstName, lastName, age, timestamp FROM " + applicationConfig.getPostgresTable();
         List<Person> persons = new ArrayList<>();
         try (PreparedStatement preparedStatement = postgresJDBC.createPostgresConnection()
                 .prepareStatement(sqlStatement)) {

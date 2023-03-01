@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 public class PersonController {
-    PersonService personService;
+    private PersonService personService;
 
     public PersonController() {
         this.personService = new PersonService();
@@ -45,5 +45,10 @@ public class PersonController {
     public void removeTable() {
         Gson gson = new Gson();
         delete("/api/persons/delete", (req, res) -> gson.toJson(personService.removeDBTable()));
+    }
+
+    public void randomCaclulation() {
+        Gson gson = new Gson();
+        get("/api/random", (req, res) -> gson.toJson(personService.randomCalculation()));
     }
 }
