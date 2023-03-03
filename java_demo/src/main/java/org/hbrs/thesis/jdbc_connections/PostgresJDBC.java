@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import org.hbrs.thesis.config.ApplicationConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PostgresJDBC {
-    private static Logger logger = Logger.getLogger(PostgresJDBC.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(PostgresJDBC.class.getName());
     private ApplicationConfig applicationConfig;
 
     public PostgresJDBC() {
@@ -18,7 +19,7 @@ public class PostgresJDBC {
         try {
             createPersonsTable();
         } catch (SQLException ex) {
-            logger.warning("Table creation failed with the message: " + ex.getMessage());
+            logger.warn("Table creation failed with the message: {}", ex.getMessage());
         }
     }
 
@@ -31,7 +32,7 @@ public class PostgresJDBC {
         try {
             connection = DriverManager.getConnection(url, dbProperties);
         } catch (SQLException ex) {
-            logger.warning("Connection to postgres DB failed with the message: " + ex.getMessage());
+            logger.warn("Connection to postgres DB failed with the message: {}", ex.getMessage());
         }
 
         return connection;
@@ -46,7 +47,7 @@ public class PostgresJDBC {
                     prepareStatement.executeUpdate();
                 }
             } else {
-                logger.warning("Couldn't create the " + applicationConfig.getPostgresTable() + " table, because the connection was null");
+                logger.warn("Couldn't create the {} table, because the connection was null", applicationConfig.getPostgresTable());
             }
         }
     }

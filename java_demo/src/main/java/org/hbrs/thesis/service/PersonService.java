@@ -1,7 +1,6 @@
 package org.hbrs.thesis.service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -24,12 +23,15 @@ public class PersonService {
     }
 
     public MessageDto generatePersonsToDB(long numberOfPersonsToGenerate) throws SQLException {
+
         personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
+        
         return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
     }
 
     public MessageDto removeDBTable() throws SQLException {
         personDao.dropDBTable();
+        
         return new MessageDto("You have successfully deleted the " + applicationConfig.getPostgresTable() + " table");
     }
 

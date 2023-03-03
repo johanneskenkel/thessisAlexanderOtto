@@ -43,8 +43,7 @@ public class PersonDao {
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
         int age = 18 + random.nextInt(83);
-        String timestamp = Instant.now().toString();
-        return new Person(0, firstName, lastName, age, timestamp);
+        return new Person(0, firstName, lastName, age, "");
     }
 
     private static PreparedStatement insertToDB(Person person, PreparedStatement preparedStatement)
@@ -52,7 +51,7 @@ public class PersonDao {
         preparedStatement.setString(1, person.getFirstName());
         preparedStatement.setString(2, person.getLastName());
         preparedStatement.setInt(3, person.getAge());
-        preparedStatement.setTimestamp(4, Timestamp.valueOf(person.getTimestamp()));
+        preparedStatement.setTimestamp(4, Timestamp.from(Instant.now()));
 
         preparedStatement.addBatch();
         return preparedStatement;
