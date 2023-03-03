@@ -23,15 +23,12 @@ public class PersonService {
     }
 
     public MessageDto generatePersonsToDB(long numberOfPersonsToGenerate) throws SQLException {
-
         personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
-        
         return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
     }
 
     public MessageDto removeDBTable() throws SQLException {
         personDao.dropDBTable();
-        
         return new MessageDto("You have successfully deleted the " + applicationConfig.getPostgresTable() + " table");
     }
 
@@ -41,7 +38,6 @@ public class PersonService {
         for(int i=0; i<1e9; ++i) {
              res = random.nextDouble()+0.1 / random.nextDouble() + 0.1;
         }
-        
         return new MessageDto("Random Success " + res);
     }
 }
