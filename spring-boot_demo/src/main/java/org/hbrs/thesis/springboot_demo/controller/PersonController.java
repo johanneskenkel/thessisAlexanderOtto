@@ -4,6 +4,7 @@ import org.hbrs.thesis.springboot_demo.dto.GeneratePersonsDto;
 import org.hbrs.thesis.springboot_demo.dto.MessageDto;
 import org.hbrs.thesis.springboot_demo.service.PersonService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,11 +22,16 @@ public class PersonController {
 
   @GetMapping("/")
   public ResponseEntity<Object> getAllPersons() {
-    return null;
+    return ResponseEntity.ok().body(this.personService.getAllPersons());
   }
 
   @PostMapping("/generate")
   public ResponseEntity<MessageDto> generatePersons(@RequestBody GeneratePersonsDto generatePersonsDto) {
     return ResponseEntity.ok().body(this.personService.generatePersonsToDB(generatePersonsDto.getNumber()));
   }
+
+  @DeleteMapping("/deleteAll")
+  public ResponseEntity<MessageDto> removeTable() {
+    return ResponseEntity.ok().body(this.personService.removeDBTable());
+}
 }

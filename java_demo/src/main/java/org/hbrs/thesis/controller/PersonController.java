@@ -22,7 +22,9 @@ public class PersonController {
 
     public void getAllPersons() {
         Gson gson = new Gson();
-        get("/api/persons", (req, res) -> PersonMappings.mapPersonListToPersonDtoList(personService.getAllPersons()),
+        get("/api/persons", (req, res) -> {
+            return PersonMappings.mapPersonListToPersonDtoList(personService.getAllPersons());
+        },
                 gson::toJson);
 
     }
@@ -44,7 +46,7 @@ public class PersonController {
 
     public void removeTable() {
         Gson gson = new Gson();
-        delete("/api/persons/delete", (req, res) -> gson.toJson(personService.removeDBTable()));
+        delete("/api/persons/deleteAll", (req, res) -> gson.toJson(personService.removeDBTable()));
     }
 
     public void randomCaclulation() {

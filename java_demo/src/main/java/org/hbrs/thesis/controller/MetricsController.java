@@ -11,6 +11,7 @@ import static spark.Spark.get;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.common.TextFormat;
+
 import spark.Request;
 import spark.Response;
 
@@ -23,8 +24,6 @@ public class MetricsController {
     private static final Gauge PROCESS_CPU_LOAD_GAUGE = Gauge.build().namespace(PROMETHEUS_NAMESPACE)
             .name("process_cpu_load")
             .help("CPU utilization in %").register();
-    private static final Gauge CPU_POWER_CONSUMPTION = Gauge.build().namespace(PROMETHEUS_NAMESPACE)
-            .name("estimated_cpu_power_consumption").help("Estimated CPU Power consumption in watts").register();
     private static final Gauge INITIAL_MEMORY_GAUGE = Gauge.build().namespace(PROMETHEUS_NAMESPACE)
             .name("initial_memory")
             .help("Initial memory").register();
@@ -48,8 +47,7 @@ public class MetricsController {
                     double processCpuLoad = osBean.getProcessCpuLoad();
                     CPU_LOAD_GAUGE.set(osBean.getCpuLoad() * 100);
                     PROCESS_CPU_LOAD_GAUGE.set(processCpuLoad * 100);
-                    // 45W is the TDP of an Intel® Core™ i7-9750H Processor
-                    CPU_POWER_CONSUMPTION.set(45.0 * processCpuLoad);
+                    // 45W is the TDP of an Intel® Core™ i7-9750H Processor     
                     MAX_HEAP_MEMORY_GAUGE.set((double) memoryMXBean.getHeapMemoryUsage().getMax() / 1048576);
                     INITIAL_MEMORY_GAUGE.set((double) memoryMXBean.getHeapMemoryUsage().getInit() / 1048576);
                     USED_HEAP_MEMORY_GAUGE.set((double) memoryMXBean.getHeapMemoryUsage().getUsed() / 1048576);

@@ -22,6 +22,7 @@ public class Person {
     @Column(name = "timestamp", nullable = false)
     private String timestamp;
 
+    public Person() {}
     public Person(long id, String firstName, String lastName, int age, String timestamp) {
         this.id = id;
         this.firstName = firstName;

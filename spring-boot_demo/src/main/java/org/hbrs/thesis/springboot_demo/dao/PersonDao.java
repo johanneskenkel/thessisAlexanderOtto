@@ -21,9 +21,13 @@ public class PersonDao {
     this.personRepository = personRepository;
   }
 
+  public List<Person> getAllPersons() {
+    return this.personRepository.findAll();
+  }
+
   public void insertNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) {
     List<Person> personList = new ArrayList<>();
-    for(int i=0; i<numberOfPersonsToGenerate; ++i) {
+    for (int i = 0; i < numberOfPersonsToGenerate; ++i) {
       personList.add(generatePerson());
     }
     personRepository.saveAll(personList);
@@ -35,6 +39,10 @@ public class PersonDao {
     int age = 18 + random.nextInt(83);
     String timestamp = Instant.now().toString();
     return new Person(0, firstName, lastName, age, timestamp);
-}
+  }
+
+  public void dropDBTable() {
+    personRepository.deleteAll();
+  }
 
 }
