@@ -9,15 +9,30 @@ import java.util.Random;
 
 import org.hbrs.thesis.springboot_demo.model.Person;
 import org.hbrs.thesis.springboot_demo.repository.PersonRepository;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Service;
 
 import com.github.javafaker.Faker;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PersonDao {
   private static Random random = new Random();
   private Faker faker = new Faker();
   private PersonRepository personRepository;
+
+  @PersistenceContext
+  private EntityManager entityManager;
 
   public PersonDao(PersonRepository personRepository) {
     this.personRepository = personRepository;
@@ -51,8 +66,9 @@ public class PersonDao {
     return new Person(0, firstName, lastName, age, timestamp);
   }
 
+  @Transactional
   public void dropDBTable() {
-    personRepository.deleteAll();
+    entityManager.createNativeQuery("DROP TABLE persons").executeUpdate();
   }
 
   public void removePersonById(Long id) {

@@ -1,12 +1,12 @@
 package org.hbrs.thesis.springboot_demo.dto;
 
 public class GeneratePersonsDto {
-    private long numberOfPersons;
+    private Long numberOfPersons;
 
     public GeneratePersonsDto() {
     }
 
-    public GeneratePersonsDto(long numberOfPersons) {
+    public GeneratePersonsDto(Long numberOfPersons) {
         this.numberOfPersons = numberOfPersons;
     }
 
@@ -14,7 +14,7 @@ public class GeneratePersonsDto {
         return numberOfPersons;
     }
 
-    public void setNumberOfPersons(long numberOfPersons) {
+    public void setNumberOfPersons(Long numberOfPersons) {
         this.numberOfPersons = numberOfPersons;
     }
 

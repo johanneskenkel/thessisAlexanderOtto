@@ -38,7 +38,7 @@ public class PersonService {
     return this.personDao.getNumberOfPersons(numberOfPersons);
   }
 
-  public MessageDto generatePersonsToDB(long numberOfPersonsToGenerate) {
+  public MessageDto generatePersonsToDB(Long numberOfPersonsToGenerate) {
     personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
     return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
   }

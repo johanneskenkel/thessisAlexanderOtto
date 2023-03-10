@@ -7,7 +7,6 @@ import org.hbrs.thesis.springboot_demo.dto.MessageDto;
 import org.hbrs.thesis.springboot_demo.dto.PersonDto;
 import org.hbrs.thesis.springboot_demo.mappings.PersonMappings;
 import org.hbrs.thesis.springboot_demo.service.PersonService;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -38,7 +39,7 @@ public class PersonController {
 
 
   @GetMapping("/{id}")
-  public ResponseEntity<PersonDto> getPersonById(@PathVariable Long id) throws NotFoundException {
+  public ResponseEntity<PersonDto> getPersonById(@PathVariable Long id) throws EntityNotFoundException {
     return ResponseEntity.ok().body(PersonMappings.mapPersonToPersonDto(this.personService.getPersonById(id)));
   }
 
