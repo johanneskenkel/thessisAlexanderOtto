@@ -1,8 +1,10 @@
 package org.hbrs.thesis.springboot_demo.dao;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.hbrs.thesis.springboot_demo.model.Person;
@@ -25,6 +27,14 @@ public class PersonDao {
     return this.personRepository.findAll();
   }
 
+  public Optional<Person> getPersonById(Long id) {
+    return personRepository.findById(id);
+  }
+
+  public List<Person> getNumberOfPersons(int numberOfPersons) {
+    return personRepository.findNumberOfPersons(numberOfPersons);
+  }
+
   public void insertNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) {
     List<Person> personList = new ArrayList<>();
     for (int i = 0; i < numberOfPersonsToGenerate; ++i) {
@@ -37,7 +47,7 @@ public class PersonDao {
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
     int age = 18 + random.nextInt(83);
-    String timestamp = Instant.now().toString();
+    Timestamp timestamp = new Timestamp(new Date().getTime());
     return new Person(0, firstName, lastName, age, timestamp);
   }
 
@@ -45,4 +55,7 @@ public class PersonDao {
     personRepository.deleteAll();
   }
 
+  public void removePersonById(Long id) {
+    personRepository.deleteById(id);
+  }
 }

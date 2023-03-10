@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfig {
-    @Value("postgres.table")
+    @Value("${postgres.table}")
     private String postgresTable;
 
     public String getPostgresTable() {

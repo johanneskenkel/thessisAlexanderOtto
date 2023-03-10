@@ -1,5 +1,7 @@
 package org.hbrs.thesis.springboot_demo.model;
 
+import java.sql.Timestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,10 +22,10 @@ public class Person {
     @Column(name = "age", nullable = false)
     private int age;
     @Column(name = "timestamp", nullable = false)
-    private String timestamp;
+    private Timestamp timestamp;
 
     public Person() {}
-    public Person(long id, String firstName, String lastName, int age, String timestamp) {
+    public Person(long id, String firstName, String lastName, int age, Timestamp timestamp) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,11 +65,11 @@ public class Person {
         this.age = age;
     }
 
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -1,18 +1,18 @@
 package org.hbrs.thesis.dto;
 
 public class GeneratePersonsDto {
-    private Long number;
+    private Long numberOfPersons;
 
-    public GeneratePersonsDto(Long number) {
-        this.number = number;
+    public GeneratePersonsDto(Long numberOfPersons) {
+        this.numberOfPersons = numberOfPersons;
     }
 
-    public Long getNumber() {
-        return number;
+    public Long getNumberOfPersons() {
+        return numberOfPersons;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setNumberOfPersons(Long numberOfPersons) {
+        this.numberOfPersons = numberOfPersons;
     }
 
 }

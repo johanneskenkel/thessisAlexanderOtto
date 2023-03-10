@@ -33,7 +33,7 @@ public class PersonController {
         Gson gson = new Gson();
         post("/api/persons/generate", (req, res) -> {
             GeneratePersonsDto generatePersonsDto = gson.fromJson(req.body(), GeneratePersonsDto.class);
-            return personService.generatePersonsToDB(generatePersonsDto.getNumber());
+            return personService.generatePersonsToDB(generatePersonsDto.getNumberOfPersons());
         }, gson::toJson);
         exception(JsonSyntaxException.class, (exception, req, res) -> {
             res.type("application/json");

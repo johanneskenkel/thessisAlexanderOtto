@@ -39,7 +39,7 @@ class PersonDaoTest {
             assertFalse(person.getLastName().isBlank());
             int age = person.getAge();
             assertFalse(age < 18 && age > 100);
-            assertFalse(person.getTimestamp().isBlank());
+            assertFalse(person.getTimestamp().toString().isBlank());
             long id = person.getId();
             assertFalse(id < 0 && id > numberOfPersonsToGenerate);
         }

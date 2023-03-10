@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -43,7 +44,8 @@ public class PersonDao {
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
         int age = 18 + random.nextInt(83);
-        return new Person(0, firstName, lastName, age, "");
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        return new Person(0, firstName, lastName, age, timestamp);
     }
 
     private static PreparedStatement insertToDB(Person person, PreparedStatement preparedStatement)
@@ -65,7 +67,7 @@ public class PersonDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 persons.add(new Person(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
-                        resultSet.getInt(4), resultSet.getString(5)));
+                        resultSet.getInt(4), resultSet.getTimestamp(5)));
             }
         }
         return persons;
