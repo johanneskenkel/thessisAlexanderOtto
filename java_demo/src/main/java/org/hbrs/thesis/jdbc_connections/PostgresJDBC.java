@@ -42,7 +42,7 @@ public class PostgresJDBC {
         try (Connection connection = createPostgresConnection()) {
             if (connection != null) {
                 try (PreparedStatement prepareStatement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS " + applicationConfig.getPostgresTable() + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), age INTEGER, timestamp TIMESTAMP)")) {
+                        "CREATE TABLE IF NOT EXISTS " + applicationConfig.getPostgresTable() + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), birthDate DATE, timestamp TIMESTAMP)")) {
 
                     prepareStatement.executeUpdate();
                 }

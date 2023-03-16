@@ -16,7 +16,11 @@ public class PersonMappings {
     }
 
     public static PersonDto mapPersonToPersonDto(Person person) {
-        return new PersonDto(person.getId(), person.getFirstName(), person.getLastName(), person.getAge(), person.getTimestamp());
+        return new PersonDto(person.getId(), person.getFirstName(), person.getLastName(), person.getBirthDate(), person.getTimestamp());
+    }
+
+    public static Person mapPersonDtoToPerson(PersonDto personDto) {
+        return new Person(personDto.getId(), personDto.getFirstName(), personDto.getLastName(), personDto.getAge(), personDto.getTimestamp());
     }
 
 }

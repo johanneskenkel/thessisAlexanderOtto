@@ -1,19 +1,20 @@
 package org.hbrs.thesis.model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Person {
     private long id;
     private String firstName;
     private String lastName;
-    private int age;
+    private Date birthDate;
     private Timestamp timestamp;
 
-    public Person(long id, String firstName, String lastName, int age, Timestamp timestamp) {
+    public Person(long id, String firstName, String lastName, Date birthDate, Timestamp timestamp) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
+        this.birthDate = birthDate;
         this.timestamp = timestamp;
     }
 
@@ -41,12 +42,12 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public int getAge() {
-        return age;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Timestamp getTimestamp() {
@@ -78,7 +79,10 @@ public class Person {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (age != other.age)
+        if (birthDate == null) {
+            if (other.birthDate != null)
+                return false;
+        } else if (!birthDate.equals(other.birthDate))
             return false;
         if (timestamp == null) {
             if (other.timestamp != null)
@@ -87,7 +91,7 @@ public class Person {
             return false;
         return true;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -95,8 +99,9 @@ public class Person {
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + age;
+        result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
         result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
         return result;
     }
+
 }

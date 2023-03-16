@@ -46,7 +46,7 @@ public class PersonController {
 
     public void removeTable() {
         Gson gson = new Gson();
-        delete("/api/persons/deleteAll", (req, res) -> gson.toJson(personService.removeDBTable()));
+        delete("/api/persons/delete/table", (req, res) -> gson.toJson(personService.removeDBTable()));
     }
 
     public void randomCaclulation() {

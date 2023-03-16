@@ -26,7 +26,7 @@ public class PersonService {
     return personDao.getAllPersons();
   }
 
-  public Person getPersonById(long id) throws EntityNotFoundException {
+  public Person getPersonById(long id) {
     Optional<Person> personOptional = this.personDao.getPersonById(id);
     if (personOptional.isEmpty()) {
       throw new EntityNotFoundException("The person with the id: " + " does not exist!");
@@ -54,6 +54,11 @@ public class PersonService {
     } catch (EmptyResultDataAccessException ex) {
       throw new EntityNotFoundException("The person with the id: " + " does not exist!");
     }
+    return new MessageDto("You habe successfully deleted the person with the id: " + id);
+  }
+
+  public MessageDto updatePersonById(Long id, Person person) {
+    this.personDao.updatePersonById(id, person);
     return new MessageDto("You habe successfully deleted the person with the id: " + id);
   }
 }

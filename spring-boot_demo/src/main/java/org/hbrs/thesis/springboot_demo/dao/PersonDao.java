@@ -1,33 +1,25 @@
 package org.hbrs.thesis.springboot_demo.dao;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.hbrs.thesis.springboot_demo.model.Person;
 import org.hbrs.thesis.springboot_demo.repository.PersonRepository;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Service;
 
 import com.github.javafaker.Faker;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.transaction.Transactional;
 
 @Service
 public class PersonDao {
-  private static Random random = new Random();
   private Faker faker = new Faker();
   private PersonRepository personRepository;
 
@@ -61,9 +53,10 @@ public class PersonDao {
   private Person generatePerson() {
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
-    int age = 18 + random.nextInt(83);
-    Timestamp timestamp = new Timestamp(new Date().getTime());
-    return new Person(0, firstName, lastName, age, timestamp);
+    java.util.Date birthUtilDate = faker.date().birthday();
+    Date birthDate = new Date(birthUtilDate.getTime());
+    Timestamp timestamp = new Timestamp(Instant.now().toEpochMilli());
+    return new Person(0, firstName, lastName, birthDate, timestamp);
   }
 
   @Transactional
@@ -73,5 +66,12 @@ public class PersonDao {
 
   public void removePersonById(Long id) {
     personRepository.deleteById(id);
+  }
+
+  public void updatePersonById(Long id, Person person) {
+    if (getPersonById(id).isEmpty() ) {
+      throw new EntityNotFoundException("The person with the id: " + " does not exist!");
+    }
+    personRepository.save(person);
   }
 }

@@ -1,19 +1,20 @@
 package org.hbrs.thesis.dto;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class PersonDto {
     private long id;
     private String firstName;
     private String lastName;
-    private int age;
+    private Date birthDate;
     private Timestamp timestamp;
 
-    public PersonDto(long id, String firstName, String lastName, int age, Timestamp timestamp) {
+    public PersonDto(long id, String firstName, String lastName, Date birthDate, Timestamp timestamp) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
+        this.birthDate = birthDate;
         this.timestamp = timestamp;
     }
 
@@ -41,12 +42,12 @@ public class PersonDto {
         this.lastName = lastName;
     }
 
-    public int getAge() {
-        return age;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Timestamp getTimestamp() {

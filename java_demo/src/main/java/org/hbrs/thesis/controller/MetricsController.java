@@ -60,8 +60,12 @@ public class MetricsController {
         processBuilder.command("/bin/bash", "-c", "rdmsr -d 0x606");
         Process process = processBuilder.start();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            int powerUnit = Integer.parseInt(reader.readLine());
-            return 1.0 / twoToPowerOf(extractBits(powerUnit, 8, 12));
+            String line = reader.readLine();
+            if (line != null) {
+                int powerUnit = Integer.parseInt(line);
+                return 1.0 / twoToPowerOf(extractBits(powerUnit, 8, 12));
+            }
+            return 0.0;
         }
     }
 
