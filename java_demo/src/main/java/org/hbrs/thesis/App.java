@@ -1,7 +1,11 @@
 package org.hbrs.thesis;
 
-import static spark.Spark.port;
 import static spark.Spark.exception;
+import static spark.Spark.port;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import org.hbrs.thesis.config.ApplicationConfig;
 import org.hbrs.thesis.controller.MetricsController;
@@ -11,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+
 public final class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
@@ -19,12 +24,18 @@ public final class App {
 
     /**
      * Generates 3 Person endpoints
+     * 
      * @param args The arguments of the program.
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws TimeoutException
+     * @throws ExecutionException
      */
-    public static void main(String[] args) {
+
+    public static void main(String[] args)
+            throws IOException {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         port(applicationConfig.getApplicationPort());
-
         PersonController personController = new PersonController();
         personController.generatePersons();
         personController.getAllPersons();
@@ -38,7 +49,8 @@ public final class App {
             res.status(400);
             MessageDto messageDto = new MessageDto("Something went wrong");
             res.body(gson.toJson(messageDto));
-            logger.warn("There was an exception: {}, that was thrown with the message: {}", exception.getClass().getSimpleName(), exception.getLocalizedMessage());
+            logger.warn("There was an exception: {}, that was thrown with the message: {}",
+                    exception.getClass().getSimpleName(), exception.getLocalizedMessage());
         });
 
     }
