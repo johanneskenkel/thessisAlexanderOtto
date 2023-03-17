@@ -42,11 +42,11 @@ public class PersonDto {
         this.lastName = lastName;
     }
 
-    public Date getAge() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setAge(Date birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 

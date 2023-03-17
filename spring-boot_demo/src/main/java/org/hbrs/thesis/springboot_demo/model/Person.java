@@ -62,7 +62,7 @@ public class Person {
         return birthDate;
     }
 
-    public void setAge(Date birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
