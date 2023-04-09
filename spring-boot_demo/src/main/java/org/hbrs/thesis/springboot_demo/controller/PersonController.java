@@ -44,9 +44,14 @@ public class PersonController {
     return ResponseEntity.ok().body(PersonMappings.mapPersonToPersonDto(this.personService.getPersonById(id)));
   }
 
-  @PostMapping("/generate")
-  public ResponseEntity<MessageDto> generatePersons(@RequestBody GeneratePersonsDto generatePersonsDto) {
-    return ResponseEntity.ok().body(this.personService.generatePersonsToDB(generatePersonsDto.getNumberOfPersons()));
+  @PostMapping("/insert")
+  public ResponseEntity<MessageDto> insertPerson(@RequestBody PersonDto personDto) {
+    return ResponseEntity.ok().body(this.personService.insertPersonToDb(PersonMappings.mapPersonDtoToPerson(personDto)));
+  }
+
+  @PostMapping("/generate_random")
+  public ResponseEntity<MessageDto> generateRandomPersons(@RequestBody GeneratePersonsDto generatePersonsDto) {
+    return ResponseEntity.ok().body(this.personService.generateRandomPersonsToDB(generatePersonsDto.getNumberOfPersons()));
   }
 
   @DeleteMapping("/delete/table")
@@ -59,8 +64,8 @@ public class PersonController {
     return ResponseEntity.ok().body(this.personService.removePersonById(id));
   }
 
-  @PutMapping("/update/{id}")
-  public ResponseEntity<MessageDto> updatePersonById(@PathVariable Long id, @RequestBody PersonDto personDto) {
-      return ResponseEntity.ok().body(this.personService.updatePersonById(id, PersonMappings.mapPersonDtoToPerson(personDto)));
+  @PutMapping("/update")
+  public ResponseEntity<MessageDto> updatePersonById(@RequestBody PersonDto personDto) {
+      return ResponseEntity.ok().body(this.personService.updatePersonById(PersonMappings.mapPersonDtoToPerson(personDto)));
   }
 }

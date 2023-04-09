@@ -19,11 +19,24 @@ public class PersonService {
     }
 
     public List<Person> getAllPersons() throws SQLException {
-        return personDao.getAllFromDb();
+        return personDao.getAllPersons();
     }
 
-    public MessageDto generatePersonsToDB(long numberOfPersonsToGenerate) throws SQLException {
-        personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
+    public Person getPersonById(long id) throws SQLException {
+        return personDao.getPersonById(id);
+    }
+
+    public List<Person> getNumberOfPersons(int numberOfPersons) throws SQLException{
+        return this.personDao.getNumberOfPersons(numberOfPersons);
+    }
+
+    public MessageDto insertPersonToDb(Person person) throws SQLException {
+        personDao.insertPerson(person);
+        return new MessageDto("You habe successfully inserted a person");
+    }
+
+    public MessageDto generateRandomPersonsToDB(long numberOfPersonsToGenerate) throws SQLException {
+        personDao.generateNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
         return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
     }
 
@@ -32,11 +45,16 @@ public class PersonService {
         return new MessageDto("You have successfully deleted the " + applicationConfig.getPostgresTable() + " table");
     }
 
+    public MessageDto updatePerson(Person person) throws SQLException {
+        personDao.updatePerson(person);
+        return new MessageDto("You habe successfully updated the person with the id: " + person.getId());
+    }
+
     public MessageDto randomCalculation() {
         double res = 0;
         Random random = new Random();
-        for(int i=0; i<1e9; ++i) {
-             res = random.nextDouble()+0.1 / random.nextDouble() + 0.1;
+        for (int i = 0; i < 1e9; ++i) {
+            res = random.nextDouble() + 0.1 / random.nextDouble() + 0.1;
         }
         return new MessageDto("Random Success " + res);
     }

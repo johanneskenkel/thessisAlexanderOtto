@@ -18,4 +18,8 @@ public class PersonMappings {
         return new PersonDto(person.getId(), person.getFirstName(), person.getLastName(), person.getBirthDate(), person.getTimestamp());
     }
 
+    public static Person mapPersonDtoToPerson(PersonDto personDto) {
+        return new Person(personDto.getId(), personDto.getFirstName(), personDto.getLastName(), personDto.getBirthDate(), personDto.getTimestamp());
+    }
+
 }

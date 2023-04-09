@@ -2,6 +2,7 @@ package org.hbrs.thesis;
 
 import static spark.Spark.exception;
 import static spark.Spark.port;
+import static spark.Spark.before;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -36,10 +37,13 @@ public final class App {
             throws IOException {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         port(applicationConfig.getApplicationPort());
+        before((req, res) -> res.header("Content-Type", "application/json"));
         PersonController personController = new PersonController();
-        personController.generatePersons();
-        personController.getAllPersons();
+        personController.generateRandomPersons();
+        personController.getPersonEndpoints();
         personController.removeTable();
+        personController.insertPerson();
+        personController.updatePerson();
         personController.randomCaclulation();
         MetricsController metricsController = new MetricsController();
         metricsController.exposePrometheusMetrics();
@@ -52,6 +56,5 @@ public final class App {
             logger.warn("There was an exception: {}, that was thrown with the message: {}",
                     exception.getClass().getSimpleName(), exception.getLocalizedMessage());
         });
-
     }
 }

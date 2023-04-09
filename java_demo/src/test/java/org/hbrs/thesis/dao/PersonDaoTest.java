@@ -25,15 +25,15 @@ class PersonDaoTest {
     @Test
     void assureThatThousandPersonsAreGenerated() throws SQLException {
         long numberOfPersonsToGenerate = 1000;
-        personDao.insertNumberOfRandomPersonsToDB(1000);
-        assertEquals(numberOfPersonsToGenerate, personDao.getAllFromDb().size());
+        personDao.generateNumberOfRandomPersonsToDB(1000);
+        assertEquals(numberOfPersonsToGenerate, personDao.getAllPersons().size());
     }
 
     @Test
     void assureThatPersonsGeneratedCorrectly() throws SQLException {
         long numberOfPersonsToGenerate = 100;
-        personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
-        List<Person> persons = personDao.getAllFromDb();
+        personDao.generateNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
+        List<Person> persons = personDao.getAllPersons();
         for (Person person : persons) {
             assertFalse(person.getFirstName().isBlank());
             assertFalse(person.getLastName().isBlank());

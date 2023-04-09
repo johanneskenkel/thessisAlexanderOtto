@@ -28,7 +28,7 @@ class PersonServiceTest {
     @Test
     void assureThatPersonGenerationReturnsCorrectMessage() throws SQLException {
         long numberOfPersonsToGenerate = 1000;
-        MessageDto messageDto = personService.generatePersonsToDB(numberOfPersonsToGenerate);
+        MessageDto messageDto = personService.generateRandomPersonsToDB(numberOfPersonsToGenerate);
         assertEquals("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB",
                 messageDto.getMessage());
     }
@@ -36,7 +36,7 @@ class PersonServiceTest {
     @Test
     @Tag("SkipCleanup")
     void assureThatTableRemovalReturnsCorrectMessage() throws SQLException {
-        personService.generatePersonsToDB(1);
+        personService.generateRandomPersonsToDB(1);
         MessageDto messageDto = personService.removeDBTable();
         assertEquals("You have successfully deleted the test table", messageDto.getMessage());
     }

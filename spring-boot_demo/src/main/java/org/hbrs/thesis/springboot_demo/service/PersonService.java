@@ -38,7 +38,12 @@ public class PersonService {
     return this.personDao.getNumberOfPersons(numberOfPersons);
   }
 
-  public MessageDto generatePersonsToDB(Long numberOfPersonsToGenerate) {
+  public MessageDto insertPersonToDb(Person person) {
+    this.personDao.insertPersonToDb(person);
+    return new MessageDto("You have successfully inserted a person to the db");
+  }
+
+  public MessageDto generateRandomPersonsToDB(Long numberOfPersonsToGenerate) {
     personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
     return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
   }
@@ -57,8 +62,8 @@ public class PersonService {
     return new MessageDto("You habe successfully deleted the person with the id: " + id);
   }
 
-  public MessageDto updatePersonById(Long id, Person person) {
-    this.personDao.updatePersonById(id, person);
-    return new MessageDto("You habe successfully deleted the person with the id: " + id);
+  public MessageDto updatePersonById(Person person) {
+    this.personDao.updatePersonById(person);
+    return new MessageDto("You habe successfully updated the person with the id: " + person.getId());
   }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.hbrs.thesis.springboot_demo.config.ApplicationConfig;
 import org.hbrs.thesis.springboot_demo.model.Person;
 import org.hbrs.thesis.springboot_demo.repository.PersonRepository;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,13 @@ import jakarta.transaction.Transactional;
 public class PersonDao {
   private Faker faker = new Faker();
   private PersonRepository personRepository;
-
+  private ApplicationConfig applicationConfig;
   @PersistenceContext
   private EntityManager entityManager;
 
-  public PersonDao(PersonRepository personRepository) {
+  public PersonDao(PersonRepository personRepository, ApplicationConfig applicationConfig) {
     this.personRepository = personRepository;
+    this.applicationConfig = applicationConfig;
   }
 
   public List<Person> getAllPersons() {
@@ -40,6 +42,15 @@ public class PersonDao {
 
   public List<Person> getNumberOfPersons(int numberOfPersons) {
     return personRepository.findNumberOfPersons(numberOfPersons);
+  }
+
+  @Transactional
+  public void insertPersonToDb(Person person) {
+    entityManager
+        .createNativeQuery("INSERT INTO " + applicationConfig.getPostgresTable()
+            + " (firstName, lastName, birthDate, timestamp) VALUES (?, ?, ?, ?)")
+        .setParameter(1, person.getFirstName()).setParameter(2, person.getLastName())
+        .setParameter(3, person.getBirthDate()).setParameter(4, new Timestamp(Instant.now().toEpochMilli())).executeUpdate();
   }
 
   public void insertNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) {
@@ -68,13 +79,12 @@ public class PersonDao {
     personRepository.deleteById(id);
   }
 
-  public void updatePersonById(Long id, Person person) {
-    Optional<Person> optionalPerson = getPersonById(id);
-    if (optionalPerson.isEmpty() ) {
+  public void updatePersonById(Person person) {
+    Optional<Person> optionalPerson = getPersonById(person.getId());
+    if (optionalPerson.isEmpty()) {
       throw new EntityNotFoundException("The person with the id: " + " does not exist!");
     }
     person.setTimestamp(optionalPerson.get().getTimestamp());
-    person.setId(id);
     personRepository.save(person);
   }
 }
