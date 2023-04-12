@@ -49,13 +49,4 @@ public class PersonService {
         personDao.updatePerson(person);
         return new MessageDto("You habe successfully updated the person with the id: " + person.getId());
     }
-
-    public MessageDto randomCalculation() {
-        double res = 0;
-        Random random = new Random();
-        for (int i = 0; i < 1e9; ++i) {
-            res = random.nextDouble() + 0.1 / random.nextDouble() + 0.1;
-        }
-        return new MessageDto("Random Success " + res);
-    }
 }

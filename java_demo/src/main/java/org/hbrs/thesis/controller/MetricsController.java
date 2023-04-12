@@ -46,29 +46,6 @@ public class MetricsController {
     private static final Gauge DRAM_POWER_CONSUMPTION = Gauge.build().namespace(PROMETHEUS_NAMESPACE)
             .name("dram_power_consumption").help("DRAM power consumption").register();
 
-    private static Long twoToPowerOf(int value) {
-        return (long) (1 << value);
-    }
-
-    private static int extractBits(int data, int lo, int hi) {
-        return (data & (~0 << lo) & ~(~0 << hi + 1)) >> lo;
-    }
-
-    private static double getConversionPowerUnit() throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        // 0x606 is the msr RAPL power unit
-        processBuilder.command("/bin/bash", "-c", "rdmsr -d 0x606");
-        Process process = processBuilder.start();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line = reader.readLine();
-            if (line != null) {
-                int powerUnit = Integer.parseInt(line);
-                return 1.0 / twoToPowerOf(extractBits(powerUnit, 8, 12));
-            }
-            return 0.0;
-        }
-    }
-
     public void exposePrometheusMetrics() throws IOException {
         OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(
                 OperatingSystemMXBean.class);
@@ -134,6 +111,30 @@ public class MetricsController {
         get("/healthz", (req, res) -> "UP");
         thread.start();
     }
+
+    private static Long twoToPowerOf(int value) {
+        return (long) (1 << value);
+    }
+
+    private static int extractBits(int data, int lo, int hi) {
+        return (data & (~0 << lo) & ~(~0 << hi + 1)) >> lo;
+    }
+
+    private static double getConversionPowerUnit() throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        // 0x606 is the msr RAPL power unit
+        processBuilder.command("/bin/bash", "-c", "rdmsr -d 0x606");
+        Process process = processBuilder.start();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line = reader.readLine();
+            if (line != null) {
+                int powerUnit = Integer.parseInt(line);
+                return 1.0 / twoToPowerOf(extractBits(powerUnit, 8, 12));
+            }
+            return 0.0;
+        }
+    }
+
 
     private String prometheusMetricsEndpoint(Request request, Response response) throws IOException {
         response.status(200);

@@ -44,7 +44,6 @@ public final class App {
         personController.removeTable();
         personController.insertPerson();
         personController.updatePerson();
-        personController.randomCaclulation();
         MetricsController metricsController = new MetricsController();
         metricsController.exposePrometheusMetrics();
         Gson gson = new Gson();

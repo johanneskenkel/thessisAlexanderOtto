@@ -73,9 +73,4 @@ public class PersonController {
             return personService.updatePerson(person);
         }, gson::toJson);
     }
-
-    public void randomCaclulation() {
-        Gson gson = new Gson();
-        get("/api/random", (req, res) -> gson.toJson(personService.randomCalculation()));
-    }
 }
