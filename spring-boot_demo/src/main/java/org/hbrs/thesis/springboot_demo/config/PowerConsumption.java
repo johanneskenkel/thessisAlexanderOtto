@@ -48,21 +48,18 @@ public class PowerConsumption {
                             actualPkgEnergy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousPkgEnergy != 0.0) {
                                 pkgPowerConsumption = actualPkgEnergy - previousPkgEnergy;
-                                System.out.println("pkg: " + (actualPkgEnergy - previousPkgEnergy) + "");
                             }
                         }
                         if (readerIndex == 1) {
                             actualPP0Energy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousPP0Energy != 0.0) {
                                 pp0PowerConsumption = actualPP0Energy - previousPP0Energy;
-                                System.out.println("pp0: " + (actualPP0Energy - previousPP0Energy) + "");
                             }
                         }
                         if (readerIndex == 2) {
                             actualDRAMEnergy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousDRAMEnergy != 0.0) {
                                 dramPowerConsumption = actualDRAMEnergy - previousDRAMEnergy;
-                                System.out.println("dram: " + (actualDRAMEnergy - previousDRAMEnergy) + "");
                             }
                         }
                         ++readerIndex;

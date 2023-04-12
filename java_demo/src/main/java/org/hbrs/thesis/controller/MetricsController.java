@@ -97,21 +97,18 @@ public class MetricsController {
                             actualPkgEnergy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousPkgEnergy != 0.0) {
                                 CPU_PACKAGE_POWER_CONSUMPTION.set(actualPkgEnergy - previousPkgEnergy);
-                                System.out.println("pkg: " + (actualPkgEnergy - previousPkgEnergy) + "");
                             }
                         }
                         if (readerIndex == 1) {
                             actualPP0Energy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousPP0Energy != 0.0) {
                                 CPU_PP0_POWER_CONSUMPTION.set(actualPP0Energy - previousPP0Energy);
-                                System.out.println("pp0: " + (actualPP0Energy - previousPP0Energy) + "" );
                             }
                         }
                         if (readerIndex == 2) {
                             actualDRAMEnergy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousDRAMEnergy != 0.0) {
                                 DRAM_POWER_CONSUMPTION.set(actualDRAMEnergy - previousDRAMEnergy);
-                                System.out.println("dram: " + (actualDRAMEnergy - previousDRAMEnergy) + "" );
                             }
                         }
                         ++readerIndex;

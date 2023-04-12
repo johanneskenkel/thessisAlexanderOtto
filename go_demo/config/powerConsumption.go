@@ -70,20 +70,14 @@ func StartReadingPowerConsumptionValues(powerConsumption *PowerConsumption) {
 		actualPkgEnergy = parseFloat(powerConsumptionStats[0]) * conversionPowerUnit
 		if previousPkgEnergy != 0.0 {
 			powerConsumption.pkgPowerConsumption = actualPkgEnergy - previousPkgEnergy
-			log.Default().Println("pkg: ")
-			log.Default().Print(powerConsumption.pkgPowerConsumption)
 		}
 		actualPP0Energy = parseFloat(powerConsumptionStats[1]) * conversionPowerUnit
 		if previousPP0Energy != 0.0 {
 			powerConsumption.pp0PowerConsumption = actualPP0Energy - previousPP0Energy
-			log.Default().Println("pp0: ")
-			log.Default().Print(powerConsumption.pp0PowerConsumption)
 		}
 		actualDRAMEnergy = parseFloat(powerConsumptionStats[2]) * conversionPowerUnit
 		if previousDRAMEnergy != 0.0 {
 			powerConsumption.dramPowerConsumption = actualDRAMEnergy - previousDRAMEnergy
-			log.Default().Println("dram: ")
-			log.Default().Print(powerConsumption.dramPowerConsumption)
 		}
 
 		previousPkgEnergy = actualPkgEnergy
