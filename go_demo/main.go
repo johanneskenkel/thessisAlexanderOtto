@@ -6,5 +6,5 @@ import (
 
 func main() {
 	routers.CreateUrlMappings()
-	routers.Router.Run(":8080")
+	routers.Router.Run(":8082")
 }
