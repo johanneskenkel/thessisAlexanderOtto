@@ -25,9 +25,15 @@ func recordMetrics() {
 	go func() {
 		for {
 			pkg, pp0, dram := powerConsumption.PowerConsumption()
-			cpuPackagePowerConsumption.Set(pkg)
-			cpuPP0PowerConsumption.Set(pp0)
-			cpuDramPowerConsumption.Set(dram)
+			if pkg >= 0 {
+				cpuPackagePowerConsumption.Set(pkg)
+			}
+			if pp0 >= 0 {
+				cpuPP0PowerConsumption.Set(pp0)
+			}
+			if dram >= 0 {
+				cpuDramPowerConsumption.Set(dram)
+			}
 			time.Sleep(1 * time.Second)
 		}
 	}()
@@ -35,9 +41,13 @@ func recordMetrics() {
 
 func CreateUrlMappings() {
 	recordMetrics()
-	Router = gin.Default()
+
+	Router = gin.New()
+
 	v1 := Router.Group("/api/persons")
 	metrics := Router.Group("/metrics")
+	// router.Use(gin.LoggerWithWriter(gin.DefaultWriter, "/metrics"),
+	// 	gin.Recovery())
 	{
 		v1.GET("/", api.GetPersons)
 		v1.GET("/:id", api.GetPersonById)

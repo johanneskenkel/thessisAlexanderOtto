@@ -27,7 +27,16 @@ public class PersonController {
 
     public void getPersonEndpoints() {
         Gson gson = new Gson();
-        get(BASE_PATH, (req, res) -> {
+        getPersonsByPath(BASE_PATH, gson);
+        getPersonsByPath(BASE_PATH + "/", gson);
+        get(BASE_PATH + "/:id",
+                (req, res) -> PersonMappings
+                        .mapPersonToPersonDto(personService.getPersonById(Long.parseLong(req.params(":id")))),
+                gson::toJson);
+    }
+
+    private void getPersonsByPath(String path, Gson gson) {
+        get(path, (req, res) -> {
             String numberOfPersonsParam = req.queryParams("numberOfPersons");
             if (numberOfPersonsParam == null) {
                 return PersonMappings.mapPersonListToPersonDtoList(personService.getAllPersons());
@@ -37,12 +46,7 @@ public class PersonController {
             }
         },
                 gson::toJson);
-        get(BASE_PATH + "/:id",
-                (req, res) -> PersonMappings
-                        .mapPersonToPersonDto(personService.getPersonById(Long.parseLong(req.params(":id")))),
-                gson::toJson);
     }
-
     public void insertPerson() {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
         post(BASE_PATH + "/insert", (req, res) -> {

@@ -9,14 +9,14 @@ import io.micrometer.core.instrument.MeterRegistry;
 public class PowerConsumptionMetrics {
     public PowerConsumptionMetrics(MeterRegistry meterRegistry) {
         PowerConsumption powerConsumption = new PowerConsumption();
-        Gauge.builder("cpu_package_power_consumption", powerConsumption, value -> powerConsumption.getPkgPowerConsumption())
+        Gauge.builder("spring_boot_cpu_package_power_consumption", powerConsumption, value -> powerConsumption.getPkgPowerConsumption())
                 .register(meterRegistry);
-        Gauge.builder("cpu_pp0_power_consumption", powerConsumption, value ->
+        Gauge.builder("spring_boot_cpu_pp0_power_consumption", powerConsumption, value ->
 
         powerConsumption.getPp0PowerConsumption()
 
         ).register(meterRegistry);
-        Gauge.builder("dram_power_consumption", powerConsumption, value -> powerConsumption.getDramPowerConsumption()
+        Gauge.builder("spring_boot_dram_power_consumption", powerConsumption, value -> powerConsumption.getDramPowerConsumption()
 
         ).register(meterRegistry);
     }

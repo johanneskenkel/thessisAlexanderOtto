@@ -9,7 +9,6 @@ import (
 )
 
 func GetPersons(c *gin.Context) {
-	initDb()
 	var err error
 	numberOfPersons := c.Query("numberOfPersons")
 	var persons []*models.Person
@@ -27,7 +26,6 @@ func GetPersons(c *gin.Context) {
 }
 
 func GetPersonById(c *gin.Context) {
-	initDb()
 	personId := c.Param("id")
 	var person *models.Person
 	var err error
@@ -47,7 +45,6 @@ func GetPersonById(c *gin.Context) {
 }
 
 func InsertPerson(c *gin.Context) {
-	initDb()
 	var person models.Person
 	err := c.BindJSON(&person)
 	if err != nil {
@@ -69,7 +66,6 @@ type generatePersons struct {
 }
 
 func GenerateRandomPersons(c *gin.Context) {
-	initDb()
 	var generatePersons generatePersons
 	err := c.BindJSON(&generatePersons)
 	if err != nil {
@@ -87,7 +83,6 @@ func GenerateRandomPersons(c *gin.Context) {
 }
 
 func RemoveDBTable(c *gin.Context) {
-	initDb()
 	message, err := models.DropDBTable()
 	if err != nil {
 		c.JSON(400, "Something went wrong")
@@ -98,7 +93,6 @@ func RemoveDBTable(c *gin.Context) {
 }
 
 func UpdatePerson(c *gin.Context) {
-	initDb()
 	var person models.Person
 	if err := c.BindJSON(&person); err != nil {
 		c.JSON(400, "Something went wrong")
@@ -120,11 +114,4 @@ func isNumber(str string) bool {
 		return false
 	}
 	return true
-}
-
-func initDb() {
-	err := models.InitDB()
-	if err != nil {
-		log.Default().Println(err)
-	}
 }

@@ -24,6 +24,5 @@ func InitDB() error {
 	}
 
 	db.Query("CREATE TABLE IF NOT EXISTS " + applicationConfig.Postgres.Table + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), birthDate DATE, timestamp TIMESTAMP)")
-
 	return db.Ping()
 }
