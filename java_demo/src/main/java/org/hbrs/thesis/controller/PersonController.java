@@ -1,13 +1,11 @@
 package org.hbrs.thesis.controller;
 
 import static spark.Spark.delete;
-import static spark.Spark.exception;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
 import org.hbrs.thesis.dto.GeneratePersonsDto;
-import org.hbrs.thesis.dto.MessageDto;
 import org.hbrs.thesis.dto.PersonDto;
 import org.hbrs.thesis.mappings.PersonMappings;
 import org.hbrs.thesis.model.Person;
@@ -15,7 +13,6 @@ import org.hbrs.thesis.service.PersonService;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 
 public class PersonController {
     private PersonService personService;
@@ -26,7 +23,7 @@ public class PersonController {
     }
 
     public void getPersonEndpoints() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSS").create();
         getPersonsByPath(BASE_PATH, gson);
         getPersonsByPath(BASE_PATH + "/", gson);
         get(BASE_PATH + "/:id",
