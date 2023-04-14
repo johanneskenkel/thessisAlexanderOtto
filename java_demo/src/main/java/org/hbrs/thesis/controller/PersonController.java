@@ -23,7 +23,7 @@ public class PersonController {
     }
 
     public void getPersonEndpoints() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSS").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
         getPersonsByPath(BASE_PATH, gson);
         getPersonsByPath(BASE_PATH + "/", gson);
         get(BASE_PATH + "/:id",
@@ -45,7 +45,7 @@ public class PersonController {
                 gson::toJson);
     }
     public void insertPerson() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         post(BASE_PATH + "/insert", (req, res) -> {
             PersonDto personDto = gson.fromJson(req.body(), PersonDto.class);
             return personService.insertPersonToDb(PersonMappings.mapPersonDtoToPerson(personDto));
@@ -66,7 +66,7 @@ public class PersonController {
     }
 
     public void updatePerson() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         put(BASE_PATH + "/update", (req, res) -> {
             
             Person person = PersonMappings.mapPersonDtoToPerson(gson.fromJson(req.body(), PersonDto.class));
