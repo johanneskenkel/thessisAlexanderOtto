@@ -32,10 +32,11 @@ public class PersonDao {
         List<Person> persons = new ArrayList<>();
         try (Connection connection = postgresJDBC.createPostgresConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-                            resultSet.getDate(4), resultSet.getTimestamp(5)));
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
+                                resultSet.getDate(4), resultSet.getTimestamp(5)));
+                    }
                 }
             }
         }
@@ -49,10 +50,11 @@ public class PersonDao {
         try (Connection connection = postgresJDBC.createPostgresConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 preparedStatement.setLong(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    person = new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-                            resultSet.getDate(4), resultSet.getTimestamp(5));
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        person = new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
+                                resultSet.getDate(4), resultSet.getTimestamp(5));
+                    }
                 }
             }
         }
@@ -65,11 +67,12 @@ public class PersonDao {
         List<Person> persons = new ArrayList<>();
         try (Connection connection = postgresJDBC.createPostgresConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
                             resultSet.getDate(4), resultSet.getTimestamp(5)));
                 }
+            }
             }
         }
         return persons;
