@@ -30,14 +30,12 @@ public class PersonDao {
         String sqlStatement = "SELECT id, firstName, lastName, birthDate, timestamp FROM "
                 + applicationConfig.getPostgresTable();
         List<Person> persons = new ArrayList<>();
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-                                resultSet.getDate(4), resultSet.getTimestamp(5)));
-                    }
-                }
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+                ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
+                        resultSet.getDate(4), resultSet.getTimestamp(5)));
             }
         }
         return persons;
@@ -47,15 +45,12 @@ public class PersonDao {
         String sqlStatement = "SELECT id, firstName, lastName, birthDate, timestamp FROM "
                 + applicationConfig.getPostgresTable() + " WHERE id = ?";
         Person person = null;
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                preparedStatement.setLong(1, id);
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        person = new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-                                resultSet.getDate(4), resultSet.getTimestamp(5));
-                    }
-                }
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+                ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                person = new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
+                        resultSet.getDate(4), resultSet.getTimestamp(5));
             }
         }
         return person;
@@ -65,14 +60,12 @@ public class PersonDao {
         String sqlStatement = "SELECT id, firstName, lastName, birthDate, timestamp FROM "
                 + applicationConfig.getPostgresTable() + " LIMIT " + numberOfPersons;
         List<Person> persons = new ArrayList<>();
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
-                            resultSet.getDate(4), resultSet.getTimestamp(5)));
-                }
-            }
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+                ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                persons.add(new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
+                        resultSet.getDate(4), resultSet.getTimestamp(5)));
             }
         }
         return persons;
@@ -81,28 +74,27 @@ public class PersonDao {
     public void insertPerson(Person person) throws SQLException {
         String sqlStatement = "INSERT INTO " + applicationConfig.getPostgresTable()
                 + " (firstName, lastName, birthDate, timestamp) VALUES (?, ?, ?, ?)";
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection
-                    .prepareStatement(sqlStatement)) {
-                preparedStatement.setString(1, person.getFirstName());
-                preparedStatement.setString(2, person.getLastName());
-                preparedStatement.setDate(3, person.getBirthDate());
-                preparedStatement.setTimestamp(4, new Timestamp(Instant.now().toEpochMilli()));
-                preparedStatement.executeUpdate();
-            }
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(sqlStatement)) {
+            preparedStatement.setString(1, person.getFirstName());
+            preparedStatement.setString(2, person.getLastName());
+            preparedStatement.setDate(3, person.getBirthDate());
+            preparedStatement.setTimestamp(4, new Timestamp(Instant.now().toEpochMilli()));
+            preparedStatement.executeUpdate();
         }
     }
 
     public void generateNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) throws SQLException {
         String sqlStatement = "INSERT INTO " + applicationConfig.getPostgresTable()
                 + " (firstName, lastName, birthDate, timestamp) VALUES (?, ?, ?, ?)";
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                for (long i = 0; i < numberOfPersonsToGenerate; ++i) {
-                    insertToDB(generatePerson(), preparedStatement);
-                }
-                preparedStatement.executeBatch();
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(sqlStatement)) {
+            for (long i = 0; i < numberOfPersonsToGenerate; ++i) {
+                insertToDB(generatePerson(), preparedStatement);
             }
+            preparedStatement.executeBatch();
         }
     }
 
@@ -128,23 +120,23 @@ public class PersonDao {
 
     public void dropDBTable() throws SQLException {
         String sqlStatement = "DROP TABLE " + applicationConfig.getPostgresTable();
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                preparedStatement.executeUpdate();
-            }
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(sqlStatement)) {
+            preparedStatement.executeUpdate();
         }
     }
 
     public void updatePerson(Person person) throws SQLException {
         String sqlStatement = "UPDATE " + applicationConfig.getPostgresTable()
                 + " SET firstName = ?, lastName = ?, birthDate = ? WHERE id = " + person.getId();
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
-                preparedStatement.setString(1, person.getFirstName());
-                preparedStatement.setString(2, person.getLastName());
-                preparedStatement.setDate(3, person.getBirthDate());
-                preparedStatement.executeUpdate();
-            }
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(sqlStatement)) {
+            preparedStatement.setString(1, person.getFirstName());
+            preparedStatement.setString(2, person.getLastName());
+            preparedStatement.setDate(3, person.getBirthDate());
+            preparedStatement.executeUpdate();
         }
     }
 }
