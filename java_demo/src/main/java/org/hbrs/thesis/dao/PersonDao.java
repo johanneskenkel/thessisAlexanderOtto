@@ -48,6 +48,7 @@ public class PersonDao {
         try (Connection connection = postgresJDBC.createPostgresConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
                 ResultSet resultSet = preparedStatement.executeQuery()) {
+            preparedStatement.setLong(1, id);
             while (resultSet.next()) {
                 person = new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
                         resultSet.getDate(4), resultSet.getTimestamp(5));
