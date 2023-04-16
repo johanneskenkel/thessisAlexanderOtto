@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.hbrs.thesis.config.ApplicationConfig;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,13 +29,17 @@ public class PostgresJDBC {
         Properties dbProperties = new Properties();
         dbProperties.setProperty("user", applicationConfig.getPostgresUsername());
         dbProperties.setProperty("password", applicationConfig.getPostgresPassword());
+        PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
+        pgSimpleDataSource.setURL(url);
+        pgSimpleDataSource.setUser(applicationConfig.getPostgresUsername());
+        pgSimpleDataSource.setPassword(applicationConfig.getPostgresPassword());
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, dbProperties);
+            connection = pgSimpleDataSource.getConnection();
         } catch (SQLException ex) {
             logger.warn("Connection to postgres DB failed with the message: {}", ex.getMessage());
         }
-
+        
         return connection;
     }
 
