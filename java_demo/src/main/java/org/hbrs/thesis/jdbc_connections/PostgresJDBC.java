@@ -14,9 +14,18 @@ import org.slf4j.LoggerFactory;
 public class PostgresJDBC {
     private static Logger logger = LoggerFactory.getLogger(PostgresJDBC.class.getName());
     private ApplicationConfig applicationConfig;
+    PGSimpleDataSource pgSimpleDataSource;
 
     public PostgresJDBC() {
         this.applicationConfig = new ApplicationConfig();
+        String url = applicationConfig.getPostgresUrl();
+        Properties dbProperties = new Properties();
+        dbProperties.setProperty("user", applicationConfig.getPostgresUsername());
+        dbProperties.setProperty("password", applicationConfig.getPostgresPassword());
+        pgSimpleDataSource = new PGSimpleDataSource();
+        pgSimpleDataSource.setURL(url);
+        pgSimpleDataSource.setUser(applicationConfig.getPostgresUsername());
+        pgSimpleDataSource.setPassword(applicationConfig.getPostgresPassword());
         try {
             createPersonsTable();
         } catch (SQLException ex) {
@@ -25,21 +34,13 @@ public class PostgresJDBC {
     }
 
     public Connection createPostgresConnection() {
-        String url = applicationConfig.getPostgresUrl();
-        Properties dbProperties = new Properties();
-        dbProperties.setProperty("user", applicationConfig.getPostgresUsername());
-        dbProperties.setProperty("password", applicationConfig.getPostgresPassword());
-        PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
-        pgSimpleDataSource.setURL(url);
-        pgSimpleDataSource.setUser(applicationConfig.getPostgresUsername());
-        pgSimpleDataSource.setPassword(applicationConfig.getPostgresPassword());
         Connection connection = null;
         try {
             connection = pgSimpleDataSource.getConnection();
         } catch (SQLException ex) {
             logger.warn("Connection to postgres DB failed with the message: {}", ex.getMessage());
         }
-        
+
         return connection;
     }
 
