@@ -53,8 +53,9 @@ func CreateUrlMappings() {
 		v1.GET("/:id", api.GetPersonById)
 		v1.POST("/insert", api.InsertPerson)
 		v1.POST("/generate_random", api.GenerateRandomPersons)
-		v1.DELETE("/delete/table", api.RemoveDBTable)
 		v1.PUT("/update", api.UpdatePerson)
+		v1.GET("/delete/:id", api.DeletePersonById)
+		v1.DELETE("/delete/table", api.RemoveDBTable)
 		metrics.GET("", gin.WrapH(promhttp.Handler()))
 	}
 }

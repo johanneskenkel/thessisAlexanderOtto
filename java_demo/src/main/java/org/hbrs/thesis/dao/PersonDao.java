@@ -121,15 +121,6 @@ public class PersonDao {
         return preparedStatement;
     }
 
-    public void dropDBTable() throws SQLException {
-        String sqlStatement = "DROP TABLE " + applicationConfig.getPostgresTable();
-        try (Connection connection = postgresJDBC.createPostgresConnection();
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement(sqlStatement)) {
-            preparedStatement.executeUpdate();
-        }
-    }
-
     public void updatePerson(Person person) throws SQLException {
         String sqlStatement = "UPDATE " + applicationConfig.getPostgresTable()
                 + " SET firstName = ?, lastName = ?, birthDate = ? WHERE id = " + person.getId();
@@ -139,6 +130,25 @@ public class PersonDao {
             preparedStatement.setString(1, person.getFirstName());
             preparedStatement.setString(2, person.getLastName());
             preparedStatement.setDate(3, person.getBirthDate());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public void deletePersonById(long id) throws SQLException {
+        String sqlStatement = "DELETE FROM " +applicationConfig.getPostgresTable() + " WHERE id = ?";
+        try (Connection connection = postgresJDBC.createPostgresConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
+                preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
+            }
+        }
+    }
+
+    public void dropDBTable() throws SQLException {
+        String sqlStatement = "DROP TABLE " + applicationConfig.getPostgresTable();
+        try (Connection connection = postgresJDBC.createPostgresConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(sqlStatement)) {
             preparedStatement.executeUpdate();
         }
     }

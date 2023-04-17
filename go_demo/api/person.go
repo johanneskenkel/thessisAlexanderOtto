@@ -82,16 +82,6 @@ func GenerateRandomPersons(c *gin.Context) {
 	}
 }
 
-func RemoveDBTable(c *gin.Context) {
-	message, err := models.DropDBTable()
-	if err != nil {
-		c.JSON(400, "Something went wrong")
-		log.Default().Println(err)
-	} else {
-		c.JSON(200, message)
-	}
-}
-
 func UpdatePerson(c *gin.Context) {
 	var person models.Person
 	if err := c.BindJSON(&person); err != nil {
@@ -100,6 +90,35 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 	message, err := models.UpdatePerson(&person)
+	if err != nil {
+		c.JSON(400, "Something went wrong")
+		log.Default().Println(err)
+	} else {
+		c.JSON(200, message)
+	}
+}
+
+func DeletePersonById(c *gin.Context) {
+	personId := c.Param("id")
+	var message *models.Message
+	var err error
+	if isNumber(personId) {
+		message, err = models.DeletePerson(personId)
+	} else {
+		c.JSON(400, "Something went wrong")
+		log.Default().Println(err)
+		return
+	}
+	if err != nil {
+		c.JSON(404, "Something went wrong"+personId)
+		log.Default().Println(err)
+	} else {
+		c.JSON(200, message)
+	}
+}
+
+func RemoveDBTable(c *gin.Context) {
+	message, err := models.DropDBTable()
 	if err != nil {
 		c.JSON(400, "Something went wrong")
 		log.Default().Println(err)

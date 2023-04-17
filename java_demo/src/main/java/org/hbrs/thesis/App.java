@@ -25,7 +25,7 @@ public final class App {
 
     /**
      * Generates 3 Person endpoints
-     * 
+     *
      * @param args The arguments of the program.
      * @throws IOException
      * @throws InterruptedException
@@ -44,6 +44,7 @@ public final class App {
         personController.removeTable();
         personController.insertPerson();
         personController.updatePerson();
+        personController.removePersonById();
         MetricsController metricsController = new MetricsController();
         metricsController.exposePrometheusMetrics();
         Gson gson = new Gson();

@@ -40,13 +40,18 @@ public class PersonService {
         return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
     }
 
+    public MessageDto updatePerson(Person person) throws SQLException {
+        personDao.updatePerson(person);
+        return new MessageDto("You have successfully updated the person with the id: " + person.getId());
+    }
+
+    public MessageDto removePersonById(long id) throws SQLException {
+        personDao.deletePersonById(id);
+        return new MessageDto("You have successfully deleted a person with the id: " + id);
+    }
+
     public MessageDto removeDBTable() throws SQLException {
         personDao.dropDBTable();
         return new MessageDto("You have successfully deleted the " + applicationConfig.getPostgresTable() + " table");
-    }
-
-    public MessageDto updatePerson(Person person) throws SQLException {
-        personDao.updatePerson(person);
-        return new MessageDto("You habe successfully updated the person with the id: " + person.getId());
     }
 }

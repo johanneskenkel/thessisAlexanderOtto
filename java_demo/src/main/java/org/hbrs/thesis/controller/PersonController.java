@@ -44,6 +44,7 @@ public class PersonController {
         },
                 gson::toJson);
     }
+
     public void insertPerson() {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         post(BASE_PATH + "/insert", (req, res) -> {
@@ -60,18 +61,24 @@ public class PersonController {
         }, gson::toJson);
     }
 
-    public void removeTable() {
-        Gson gson = new Gson();
-        delete(BASE_PATH + "/delete/table", (req, res) -> gson.toJson(personService.removeDBTable()));
-    }
-
     public void updatePerson() {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         put(BASE_PATH + "/update", (req, res) -> {
-            
+
             Person person = PersonMappings.mapPersonDtoToPerson(gson.fromJson(req.body(), PersonDto.class));
             System.out.println(person.getBirthDate());
             return personService.updatePerson(person);
         }, gson::toJson);
+    }
+
+    public void removePersonById() {
+        Gson gson = new Gson();
+        delete(BASE_PATH + "/delete/:id",
+                (req, res) -> gson.toJson(personService.removePersonById(Long.parseLong(req.params(":id")))));
+    }
+
+    public void removeTable() {
+        Gson gson = new Gson();
+        delete(BASE_PATH + "/delete/table", (req, res) -> gson.toJson(personService.removeDBTable()));
     }
 }

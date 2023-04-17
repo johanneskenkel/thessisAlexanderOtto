@@ -90,18 +90,25 @@ func GenerateNumberOfRandomPersonsToDB(numberOfPersonsToGenerate int64) (*Messag
 	return &Message{Message: "You have successfully generated " + strconv.FormatInt(numberOfPersonsToGenerate, 10) + " persons in the DB"}, nil
 }
 
-func DropDBTable() (*Message, error) {
-
-	if _, err := db.Exec("DROP TABLE " + applicationConfig.Postgres.Table); err != nil {
-		return nil, err
-	}
-	return &Message{"You have successfully deleted the " + applicationConfig.Postgres.Table + " table"}, nil
-}
-
 func UpdatePerson(person *Person) (*Message, error) {
 
 	if _, err := db.Exec("UPDATE "+applicationConfig.Postgres.Table+" SET firstName = $1, lastName = $2, birthDate = $3 WHERE id = $4", person.FirstName, person.LastName, person.BirthDate, person.Id); err != nil {
 		return nil, err
 	}
 	return &Message{"You habe successfully updated the person with the id: " + strconv.FormatInt(person.Id, 10)}, nil
+}
+
+func DeletePerson(id string) (*Message, error) {
+	if _, err := db.Exec("DELETE FROM "+applicationConfig.Postgres.Table+" WHERE id = $1", id); err != nil {
+		return nil, err
+	}
+	return &Message{"You habe successfully deleted the person with the id: " + id}, nil
+}
+
+func DropDBTable() (*Message, error) {
+
+	if _, err := db.Exec("DROP TABLE " + applicationConfig.Postgres.Table); err != nil {
+		return nil, err
+	}
+	return &Message{"You have successfully deleted the " + applicationConfig.Postgres.Table + " table"}, nil
 }
