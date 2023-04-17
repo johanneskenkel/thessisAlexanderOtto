@@ -63,10 +63,7 @@ public class MetricsController {
             double actualPP0Energy = 0.0;
             double previousDRAMEnergy = 0.0;
             double actualDRAMEnergy = 0.0;
-            int i = 0;
-            double[] allPkgEnergyValues = new double[200];
-            double sumOfAllPkgEnergy = 0.0;
-            while (i < 200) {
+            while (true) {
                 try {
                     Process process = processBuilder.start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -77,23 +74,18 @@ public class MetricsController {
                             actualPkgEnergy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousPkgEnergy != 0.0) {
                                 CPU_PACKAGE_POWER_CONSUMPTION.set(actualPkgEnergy - previousPkgEnergy);
-                                System.out.println("pkg: " + (actualPkgEnergy - previousPkgEnergy) + "");
-                                allPkgEnergyValues[i] = actualPkgEnergy - previousPkgEnergy;
-                                sumOfAllPkgEnergy += (actualPkgEnergy - previousPkgEnergy);
                             }
                         }
                         if (readerIndex == 1) {
                             actualPP0Energy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousPP0Energy != 0.0) {
                                 CPU_PP0_POWER_CONSUMPTION.set(actualPP0Energy - previousPP0Energy);
-                                System.out.println("pp0: " + (actualPP0Energy - previousPP0Energy) + "");
                             }
                         }
                         if (readerIndex == 2) {
                             actualDRAMEnergy = Long.parseLong(line) * conversionPowerUnit;
                             if (previousDRAMEnergy != 0.0) {
                                 DRAM_POWER_CONSUMPTION.set(actualDRAMEnergy - previousDRAMEnergy);
-                                System.out.println("dram: " + (actualDRAMEnergy - previousDRAMEnergy) + "");
                             }
                         }
                         ++readerIndex;
@@ -109,25 +101,11 @@ public class MetricsController {
                     USED_HEAP_MEMORY_GAUGE.set((double) memoryMXBean.getHeapMemoryUsage().getUsed() / 1048576);
                     COMMITTED_MEMORY_GAUGE.set((double) memoryMXBean.getHeapMemoryUsage().getUsed() / 1048576);
                     TimeUnit.SECONDS.sleep(1);
-                    ++i;
                 } catch (InterruptedException | IOException ex) {
                     ex.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
-            System.out.println("power Measurements: " + i);
-            double averagePackagePowerConsumption = sumOfAllPkgEnergy / i;
-            System.out.println("Average package power Consumption: " + averagePackagePowerConsumption);
-            double sumSquareOfEnergyMinusAverage = 0.0;
-            for (double pkgEnergy : allPkgEnergyValues) {
-                double energyMinusAverage = pkgEnergy - averagePackagePowerConsumption;
-                sumSquareOfEnergyMinusAverage += (energyMinusAverage * energyMinusAverage);
-            }
-            double divisionOfSumSquareOfAbsoluteEnergyToNumberOfMeasurements = sumSquareOfEnergyMinusAverage
-                    / i;
-            System.out.println(
-                    "Standard deviation: " + (Math.sqrt(divisionOfSumSquareOfAbsoluteEnergyToNumberOfMeasurements)));
-            System.exit(0);
         });
         get("/metrics", this::prometheusMetricsEndpoint);
         get("/healthz", (req, res) -> "UP");
@@ -156,6 +134,7 @@ public class MetricsController {
             return 0.0;
         }
     }
+
 
     private String prometheusMetricsEndpoint(Request request, Response response) throws IOException {
         response.status(200);
