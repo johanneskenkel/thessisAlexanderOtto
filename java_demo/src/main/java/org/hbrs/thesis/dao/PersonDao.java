@@ -77,14 +77,15 @@ public class PersonDao {
     public void insertPerson(Person person) throws SQLException {
         String sqlStatement = "INSERT INTO " + applicationConfig.getPostgresTable()
                 + " (firstName, lastName, birthDate, timestamp) VALUES (?, ?, ?, ?)";
-        try (Connection connection = postgresJDBC.createPostgresConnection();
-                PreparedStatement preparedStatement = connection
-                        .prepareStatement(sqlStatement)) {
-            preparedStatement.setString(1, person.getFirstName());
-            preparedStatement.setString(2, person.getLastName());
-            preparedStatement.setDate(3, person.getBirthDate());
-            preparedStatement.setTimestamp(4, new Timestamp(Instant.now().toEpochMilli()));
-            preparedStatement.executeUpdate();
+        try (Connection connection = postgresJDBC.createPostgresConnection()) {
+            try (PreparedStatement preparedStatement = connection
+                    .prepareStatement(sqlStatement)) {
+                preparedStatement.setString(1, person.getFirstName());
+                preparedStatement.setString(2, person.getLastName());
+                preparedStatement.setDate(3, person.getBirthDate());
+                preparedStatement.setTimestamp(4, new Timestamp(Instant.now().toEpochMilli()));
+                preparedStatement.executeUpdate();
+            }
         }
     }
 
@@ -135,7 +136,7 @@ public class PersonDao {
     }
 
     public void deletePersonById(long id) throws SQLException {
-        String sqlStatement = "DELETE FROM " +applicationConfig.getPostgresTable() + " WHERE id = ?";
+        String sqlStatement = "DELETE FROM " + applicationConfig.getPostgresTable() + " WHERE id = ?";
         try (Connection connection = postgresJDBC.createPostgresConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
                 preparedStatement.setLong(1, id);
