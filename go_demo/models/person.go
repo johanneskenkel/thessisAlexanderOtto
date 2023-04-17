@@ -53,8 +53,10 @@ func getPersonsByQuery(sqlQuery string) ([]*Person, error) {
 
 func GetPersonById(id string) (*Person, error) {
 	var person Person
-	err := db.QueryRow("SELECT id, firstName, lastName, birthDate, timestamp FROM "+applicationConfig.Postgres.Table+" WHERE id=$1",
-		id).Scan(&person.Id, &person.FirstName, &person.LastName, &person.BirthDate, &person.Timestamp)
+	row := db.QueryRow("SELECT id, firstName, lastName, birthDate, timestamp FROM "+applicationConfig.Postgres.Table+" WHERE id=$1",
+		id)
+	err := row.Scan(&person.Id, &person.FirstName, &person.LastName, &person.BirthDate, &person.Timestamp)
+
 	if err != nil {
 		return nil, err
 	}
