@@ -82,7 +82,7 @@ public class PersonDao {
   public void updatePersonById(Person person) {
     Optional<Person> optionalPerson = getPersonById(person.getId());
     if (optionalPerson.isEmpty()) {
-      throw new EntityNotFoundException("The person with the id: " + " does not exist!");
+      throw new EntityNotFoundException("The person with the id: " + person.getId() + " does not exist!");
     }
     person.setTimestamp(optionalPerson.get().getTimestamp());
     personRepository.save(person);

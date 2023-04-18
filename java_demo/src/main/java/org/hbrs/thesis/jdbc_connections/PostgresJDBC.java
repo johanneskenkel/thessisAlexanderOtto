@@ -15,7 +15,6 @@ public class PostgresJDBC {
     private static Logger logger = LoggerFactory.getLogger(PostgresJDBC.class.getName());
     private ApplicationConfig applicationConfig;
     PGSimpleDataSource pgSimpleDataSource;
-
     public PostgresJDBC() {
         this.applicationConfig = new ApplicationConfig();
         String url = applicationConfig.getPostgresUrl();
