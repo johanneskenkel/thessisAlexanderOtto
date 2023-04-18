@@ -77,14 +77,26 @@ public class PersonDao {
     public void insertPerson(Person person) throws SQLException {
         String sqlStatement = "INSERT INTO " + applicationConfig.getPostgresTable()
                 + " (firstName, lastName, birthDate, timestamp) VALUES (?, ?, ?, ?)";
-        try (Connection connection = postgresJDBC.createPostgresConnection()) {
-            try (PreparedStatement preparedStatement = connection
-                    .prepareStatement(sqlStatement)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = postgresJDBC.createPostgresConnection();
+            try {
+                preparedStatement = connection
+                        .prepareStatement(sqlStatement);
                 preparedStatement.setString(1, person.getFirstName());
                 preparedStatement.setString(2, person.getLastName());
                 preparedStatement.setDate(3, person.getBirthDate());
                 preparedStatement.setTimestamp(4, new Timestamp(Instant.now().toEpochMilli()));
                 preparedStatement.executeUpdate();
+            } finally {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            }
+        } finally {
+            if (connection != null) {
+                connection.close();
             }
         }
     }

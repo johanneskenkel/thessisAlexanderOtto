@@ -66,7 +66,6 @@ public class PersonController {
         put(BASE_PATH + "/update", (req, res) -> {
 
             Person person = PersonMappings.mapPersonDtoToPerson(gson.fromJson(req.body(), PersonDto.class));
-            System.out.println(person.getBirthDate());
             return personService.updatePerson(person);
         }, gson::toJson);
     }
