@@ -1,3 +1,4 @@
 .vscode/
 java_demo/target/
+java_demo_hikari/target
 .DS_Store

@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
 public class PostgresJDBC {
     private static Logger logger = LoggerFactory.getLogger(PostgresJDBC.class.getName());
     private ApplicationConfig applicationConfig;
-    PGSimpleDataSource pgSimpleDataSource;
+    private static HikariDataSource hikariDataSource;
+
     public PostgresJDBC() {
         this.applicationConfig = new ApplicationConfig();
         String url = applicationConfig.getPostgresUrl();
@@ -46,11 +47,13 @@ public class PostgresJDBC {
         try (Connection connection = createPostgresConnection()) {
             if (connection != null) {
                 try (PreparedStatement prepareStatement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS " + applicationConfig.getPostgresTable() + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), birthDate DATE, timestamp TIMESTAMP)")) {
+                        "CREATE TABLE IF NOT EXISTS " + applicationConfig.getPostgresTable()
+                                + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), birthDate DATE, timestamp TIMESTAMP)")) {
                     prepareStatement.executeUpdate();
                 }
             } else {
-                logger.warn("Couldn't create the {} table, because the connection was null", applicationConfig.getPostgresTable());
+                logger.warn("Couldn't create the {} table, because the connection was null",
+                        applicationConfig.getPostgresTable());
             }
         }
     }
