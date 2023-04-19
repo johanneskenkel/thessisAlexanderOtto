@@ -20,7 +20,7 @@ import spark.Response;
 
 public class MetricsController {
     private static final CollectorRegistry registry = CollectorRegistry.defaultRegistry;
-    private static final String PROMETHEUS_NAMESPACE = "java_spark";
+    private static final String PROMETHEUS_NAMESPACE = "java_spark_hikari";
     private static final Gauge CPU_LOAD_GAUGE = Gauge.build()
             .namespace(PROMETHEUS_NAMESPACE).name("cpu_load").help("CPU load in %")
             .register();
