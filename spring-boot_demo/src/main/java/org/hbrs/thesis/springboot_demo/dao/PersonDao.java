@@ -57,6 +57,7 @@ public class PersonDao {
     List<Person> personList = new ArrayList<>();
     for (int i = 0; i < numberOfPersonsToGenerate; ++i) {
       personList.add(generatePerson());
+      // personRepository.save(generatePerson());
     }
     personRepository.saveAll(personList);
   }
