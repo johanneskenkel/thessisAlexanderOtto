@@ -57,7 +57,7 @@ public class PersonService {
     try {
       this.personDao.removePersonById(id);
     } catch (EmptyResultDataAccessException ex) {
-      throw new EntityNotFoundException("The person with the id: " + " does not exist!");
+      throw new EntityNotFoundException("The person with the id: " + id + " does not exist!");
     }
     return new MessageDto("You habe successfully deleted the person with the id: " + id);
   }
