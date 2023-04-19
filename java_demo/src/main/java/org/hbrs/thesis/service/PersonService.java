@@ -1,7 +1,6 @@
 package org.hbrs.thesis.service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +12,7 @@ import org.hbrs.thesis.model.Person;
 public class PersonService {
     private PersonDao personDao;
     private ApplicationConfig applicationConfig;
+    private Random random = new Random();
 
     public PersonService() {
         personDao = new PersonDao();
@@ -27,7 +27,7 @@ public class PersonService {
         return personDao.getPersonById(id);
     }
 
-    public List<Person> getNumberOfPersons(int numberOfPersons) throws SQLException{
+    public List<Person> getNumberOfPersons(int numberOfPersons) throws SQLException {
         return this.personDao.getNumberOfPersons(numberOfPersons);
     }
 
@@ -58,10 +58,20 @@ public class PersonService {
 
     public MessageDto randomCalculation() {
         int result = 0;
-        Random random = null;
-        random = new Random();
-        for(int i=0; i<1000000000; ++i) {
+
+        for (int i = 0; i < 1000000000; ++i) {
             result += random.nextInt(1);
+        }
+        return new MessageDto("Calculation was successfull with the result: " + result);
+    }
+
+    public MessageDto unoptimizedRandomCalculation() {
+        int result = 0;
+        Random randomUnOptimized = null;
+
+        for (int i = 0; i < 1000000000; ++i) {
+            randomUnOptimized = new Random();
+            result += randomUnOptimized.nextInt(1);
         }
         return new MessageDto("Calculation was successfull with the result: " + result);
     }
