@@ -13,9 +13,10 @@ import com.zaxxer.hikari.HikariDataSource;
 public class PostgresJDBC {
     private static Logger logger = LoggerFactory.getLogger(PostgresJDBC.class.getName());
     private ApplicationConfig applicationConfig = new ApplicationConfig();
-    private static HikariDataSource hikariDataSource;
+    private HikariDataSource hikariDataSource;
 
     public PostgresJDBC() {
+        hikariDataSource = new HikariDataSource();
         hikariDataSource.setJdbcUrl(applicationConfig.getPostgresUrl());
         hikariDataSource.setUsername(applicationConfig.getPostgresUsername());
         hikariDataSource.setPassword(applicationConfig.getPostgresPassword());
