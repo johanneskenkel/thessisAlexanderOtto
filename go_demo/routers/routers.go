@@ -46,8 +46,6 @@ func CreateUrlMappings() {
 
 	v1 := Router.Group("/api/persons")
 	metrics := Router.Group("/metrics")
-	// router.Use(gin.LoggerWithWriter(gin.DefaultWriter, "/metrics"),
-	// 	gin.Recovery())
 	{
 		v1.GET("/", api.GetPersons)
 		v1.GET("/:id", api.GetPersonById)
