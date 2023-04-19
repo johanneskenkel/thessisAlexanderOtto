@@ -39,12 +39,14 @@ public final class App {
         port(applicationConfig.getApplicationPort());
         before((req, res) -> res.header("Content-Type", "application/json"));
         PersonController personController = new PersonController();
+        personController.randomCalculation();
         personController.generateRandomPersons();
         personController.getPersonEndpoints();
         personController.removeTable();
         personController.insertPerson();
         personController.updatePerson();
         personController.removePersonById();
+
         MetricsController metricsController = new MetricsController();
         metricsController.exposePrometheusMetrics();
         Gson gson = new Gson();

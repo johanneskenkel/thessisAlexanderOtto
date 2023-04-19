@@ -27,8 +27,14 @@ public class PersonController {
         getPersonsByPath(BASE_PATH, gson);
         getPersonsByPath(BASE_PATH + "/", gson);
         get(BASE_PATH + "/:id",
-                (req, res) -> PersonMappings
-                        .mapPersonToPersonDto(personService.getPersonById(Long.parseLong(req.params(":id")))),
+                (req, res) -> 
+                {
+
+                    if(Character.isDigit(req.params(":id").charAt(0))) {
+                    return PersonMappings
+                        .mapPersonToPersonDto(personService.getPersonById(Long.parseLong(req.params(":id"))));
+                    } else return null;
+                    },
                 gson::toJson);
     }
 
@@ -79,5 +85,10 @@ public class PersonController {
     public void removeTable() {
         Gson gson = new Gson();
         delete(BASE_PATH + "/delete/table", (req, res) -> gson.toJson(personService.removeDBTable()));
+    }
+
+    public void randomCalculation() {
+        Gson gson = new Gson();
+        get(BASE_PATH + "/random", (req, res) -> personService.randomCalculation(), gson::toJson);
     }
 }

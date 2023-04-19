@@ -1,6 +1,7 @@
 package org.hbrs.thesis.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -53,5 +54,15 @@ public class PersonService {
     public MessageDto removeDBTable() throws SQLException {
         personDao.dropDBTable();
         return new MessageDto("You have successfully deleted the " + applicationConfig.getPostgresTable() + " table");
+    }
+
+    public MessageDto randomCalculation() {
+        int result = 0;
+        Random random = null;
+        random = new Random();
+        for(int i=0; i<1000000000; ++i) {
+            result += random.nextInt(1);
+        }
+        return new MessageDto("Calculation was successfull with the result: " + result);
     }
 }
