@@ -45,6 +45,15 @@ public class PersonDao {
         String sqlStatement = "SELECT id, firstName, lastName, birthDate, timestamp FROM "
                 + applicationConfig.getPostgresTable() + " WHERE id = ?";
         Person person = null;
+        // Code used for examination
+        // Connection connection = postgresJDBC.createPostgresConnection();
+        // PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+        // preparedStatement.setLong(1, id);
+        // ResultSet resultSet = preparedStatement.executeQuery();
+        // while (resultSet.next()) {
+        //     person = new Person(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3),
+        //             resultSet.getDate(4), resultSet.getTimestamp(5));
+        // }
         try (Connection connection = postgresJDBC.createPostgresConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             preparedStatement.setLong(1, id);
