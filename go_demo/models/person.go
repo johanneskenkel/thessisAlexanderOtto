@@ -52,6 +52,7 @@ func getPersonsByQuery(sqlQuery string) ([]*Person, error) {
 }
 
 func GetPersonById(id string) (*Person, error) {
+	// InitDB()
 	var person Person
 	row := db.QueryRow("SELECT id, firstName, lastName, birthDate, timestamp FROM "+applicationConfig.Postgres.Table+" WHERE id=$1",
 		id)
