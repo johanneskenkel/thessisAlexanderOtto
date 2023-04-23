@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.hbrs.thesis.springboot_demo.config.ApplicationConfig;
 import org.hbrs.thesis.springboot_demo.model.Person;
 import org.hbrs.thesis.springboot_demo.repository.PersonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.javafaker.Faker;
@@ -24,8 +25,7 @@ public class PersonDao {
   private Faker faker = new Faker();
   private PersonRepository personRepository;
   private ApplicationConfig applicationConfig;
-  @PersistenceContext
-  private EntityManager entityManager;
+
 
   public PersonDao(PersonRepository personRepository, ApplicationConfig applicationConfig) {
     this.personRepository = personRepository;
@@ -46,14 +46,10 @@ public class PersonDao {
 
   @Transactional
   public void insertPersonToDb(Person person) {
-    entityManager
-        .createNativeQuery("INSERT INTO " + applicationConfig.getPostgresTable()
-            + " (firstName, lastName, birthDate, timestamp) VALUES (?, ?, ?, ?)")
-        .setParameter(1, person.getFirstName()).setParameter(2, person.getLastName())
-        .setParameter(3, person.getBirthDate()).setParameter(4, new Timestamp(Instant.now().toEpochMilli())).executeUpdate();
+    personRepository.insertPersonToDb(person);
   }
 
-  public void insertNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) {
+  public void generateNumberOfRandomPersonsToDB(long numberOfPersonsToGenerate) {
     List<Person> personList = new ArrayList<>();
     for (int i = 0; i < numberOfPersonsToGenerate; ++i) {
       personList.add(generatePerson());
@@ -73,14 +69,14 @@ public class PersonDao {
 
   @Transactional
   public void dropDBTable() {
-    entityManager.createNativeQuery("DROP TABLE persons").executeUpdate();
+    personRepository.dropDBTable();
   }
 
-  public void removePersonById(Long id) {
+  public void deletePersonById(Long id) {
     personRepository.deleteById(id);
   }
 
-  public void updatePersonById(Person person) {
+  public void updatePerson(Person person) {
     Optional<Person> optionalPerson = getPersonById(person.getId());
     if (optionalPerson.isEmpty()) {
       throw new EntityNotFoundException("The person with the id: " + person.getId() + " does not exist!");

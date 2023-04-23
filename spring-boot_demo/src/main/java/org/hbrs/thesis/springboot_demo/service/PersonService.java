@@ -44,7 +44,7 @@ public class PersonService {
   }
 
   public MessageDto generateRandomPersonsToDB(Long numberOfPersonsToGenerate) {
-    personDao.insertNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
+    personDao.generateNumberOfRandomPersonsToDB(numberOfPersonsToGenerate);
     return new MessageDto("You have successfully generated " + numberOfPersonsToGenerate + " persons in the DB");
   }
 
@@ -55,7 +55,7 @@ public class PersonService {
 
   public MessageDto removePersonById(Long id) {
     try {
-      this.personDao.removePersonById(id);
+      this.personDao.deletePersonById(id);
     } catch (EmptyResultDataAccessException ex) {
       throw new EntityNotFoundException("The person with the id: " + id + " does not exist!");
     }
@@ -63,7 +63,7 @@ public class PersonService {
   }
 
   public MessageDto updatePersonById(Person person) {
-    this.personDao.updatePersonById(person);
+    this.personDao.updatePerson(person);
     return new MessageDto("You habe successfully updated the person with the id: " + person.getId());
   }
 }
