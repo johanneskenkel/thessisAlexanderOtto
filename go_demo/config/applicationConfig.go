@@ -16,6 +16,7 @@ type Postgres struct {
 	Table string `json:"table"`
 }
 
+// currently unused, because it breaks the tests
 func GetApplicationConfig() *ApplicationConfig {
 	configurationFile, err := os.Open("config/applicationConfig.json")
 	if err != nil {

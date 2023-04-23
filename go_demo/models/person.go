@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/SanyaNooB/thesis.git/config"
 	"github.com/go-faker/faker/v4"
 )
 
@@ -20,14 +19,12 @@ type Message struct {
 	Message string `json:"message"`
 }
 
-var applicationConfig = config.GetApplicationConfig()
-
 func GetNumberOfPersons(numberOfPersons string) ([]*Person, error) {
-	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM " + applicationConfig.Postgres.Table + " LIMIT " + numberOfPersons)
+	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM persons LIMIT " + numberOfPersons)
 }
 
 func GetAllPersons() ([]*Person, error) {
-	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM " + applicationConfig.Postgres.Table)
+	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM persons")
 }
 
 func getPersonsByQuery(sqlQuery string) ([]*Person, error) {
@@ -54,7 +51,7 @@ func getPersonsByQuery(sqlQuery string) ([]*Person, error) {
 func GetPersonById(id string) (*Person, error) {
 	// InitDB()
 	var person Person
-	row := db.QueryRow("SELECT id, firstName, lastName, birthDate, timestamp FROM "+applicationConfig.Postgres.Table+" WHERE id=$1",
+	row := db.QueryRow("SELECT id, firstName, lastName, birthDate, timestamp FROM persons WHERE id=$1",
 		id)
 	err := row.Scan(&person.Id, &person.FirstName, &person.LastName, &person.BirthDate, &person.Timestamp)
 
@@ -65,7 +62,7 @@ func GetPersonById(id string) (*Person, error) {
 }
 
 func InsertPersonToDb(person *Person) (*Message, error) {
-	_, err := db.Exec("INSERT INTO "+applicationConfig.Postgres.Table+" (firstName, lastName, birthDate, timestamp) VALUES ($1, $2, $3, $4)", person.FirstName, person.LastName, person.BirthDate, time.Now().Format("2006-01-02T15:04:05.111"))
+	_, err := db.Exec("INSERT INTO persons (firstName, lastName, birthDate, timestamp) VALUES ($1, $2, $3, $4)", person.FirstName, person.LastName, person.BirthDate, time.Now().Format("2006-01-02T15:04:05.111"))
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +77,7 @@ func GenerateNumberOfRandomPersonsToDB(numberOfPersonsToGenerate int64) (*Messag
 
 	var i int64
 	for i = 0; i < numberOfPersonsToGenerate; i++ {
-		_, err = transaction.Exec("INSERT INTO "+applicationConfig.Postgres.Table+" (firstName, lastName, birthDate, timestamp) VALUES ($1, $2, $3, $4)", faker.FirstName(), faker.LastName(), faker.Date(), time.Now().Format("2006-01-02T15:04:05.111"))
+		_, err = transaction.Exec("INSERT INTO persons (firstName, lastName, birthDate, timestamp) VALUES ($1, $2, $3, $4)", faker.FirstName(), faker.LastName(), faker.Date(), time.Now().Format("2006-01-02T15:04:05.111"))
 		if err != nil {
 			return nil, err
 		}
@@ -95,14 +92,14 @@ func GenerateNumberOfRandomPersonsToDB(numberOfPersonsToGenerate int64) (*Messag
 
 func UpdatePerson(person *Person) (*Message, error) {
 
-	if _, err := db.Exec("UPDATE "+applicationConfig.Postgres.Table+" SET firstName = $1, lastName = $2, birthDate = $3 WHERE id = $4", person.FirstName, person.LastName, person.BirthDate, person.Id); err != nil {
+	if _, err := db.Exec("UPDATE persons SET firstName = $1, lastName = $2, birthDate = $3 WHERE id = $4", person.FirstName, person.LastName, person.BirthDate, person.Id); err != nil {
 		return nil, err
 	}
 	return &Message{"You habe successfully updated the person with the id: " + strconv.FormatInt(person.Id, 10)}, nil
 }
 
 func DeletePerson(id string) (*Message, error) {
-	if _, err := db.Exec("DELETE FROM "+applicationConfig.Postgres.Table+" WHERE id = $1", id); err != nil {
+	if _, err := db.Exec("DELETE FROM persons WHERE id = $1", id); err != nil {
 		return nil, err
 	}
 	return &Message{"You habe successfully deleted the person with the id: " + id}, nil
@@ -110,8 +107,8 @@ func DeletePerson(id string) (*Message, error) {
 
 func DropDBTable() (*Message, error) {
 
-	if _, err := db.Exec("DROP TABLE " + applicationConfig.Postgres.Table); err != nil {
+	if _, err := db.Exec("DROP TABLE persons"); err != nil {
 		return nil, err
 	}
-	return &Message{"You have successfully deleted the " + applicationConfig.Postgres.Table + " table"}, nil
+	return &Message{"You have successfully deleted the persons table"}, nil
 }
