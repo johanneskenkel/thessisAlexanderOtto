@@ -1,6 +1,7 @@
 package org.hbrs.thesis.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
 
@@ -39,5 +40,15 @@ class PersonServiceTest {
         personService.generateRandomPersonsToDB(1);
         MessageDto messageDto = personService.removeDBTable();
         assertEquals("You have successfully deleted the test table", messageDto.getMessage());
+    }
+
+    @Test
+    void assureThatPersonGenerationDoesNotTakeTooMuchTime() throws SQLException {
+        long startTime = System.nanoTime();
+        personService.generateRandomPersonsToDB(10000);
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        long MilliSecondInNano = 1000000;
+        assertTrue(timeElapsed < (MilliSecondInNano * 1500));
     }
 }

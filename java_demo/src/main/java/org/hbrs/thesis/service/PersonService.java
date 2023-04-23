@@ -2,6 +2,7 @@ package org.hbrs.thesis.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import org.hbrs.thesis.config.ApplicationConfig;
@@ -24,6 +25,10 @@ public class PersonService {
     }
 
     public Person getPersonById(long id) throws SQLException {
+        Person person = personDao.getPersonById(id);
+        if (person == null) {
+            throw new NoSuchElementException();
+        }
         return personDao.getPersonById(id);
     }
 

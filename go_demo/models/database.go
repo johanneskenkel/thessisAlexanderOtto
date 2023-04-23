@@ -7,12 +7,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	// TODO fill this in directly or through environment variable
-	// Build a DSN e.g. postgres://username:password@url.com:5432/dbName
-	DB_DSN = "postgres://admin:12345@localhost:5432/postgres?sslmode=disable"
-)
-
 var db *sql.DB
 
 func InitDB() error {
@@ -23,6 +17,7 @@ func InitDB() error {
 		return err
 	}
 	db.SetMaxOpenConns(20)
-	db.Query("CREATE TABLE IF NOT EXISTS " + applicationConfig.Postgres.Table + " (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), birthDate DATE, timestamp TIMESTAMP)")
+	db.Query("CREATE TABLE IF NOT EXISTS " + applicationConfig.Postgres.Table +
+		" (id SERIAL PRIMARY KEY, firstName VARCHAR(30), lastName VARCHAR(30), birthDate DATE, timestamp TIMESTAMP)")
 	return db.Ping()
 }

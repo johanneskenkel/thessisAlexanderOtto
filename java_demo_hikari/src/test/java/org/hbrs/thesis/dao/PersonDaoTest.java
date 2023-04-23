@@ -2,7 +2,10 @@ package org.hbrs.thesis.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -42,5 +45,38 @@ class PersonDaoTest {
             long id = person.getId();
             assertFalse(id < 0 && id > numberOfPersonsToGenerate);
         }
+    }
+
+    @Test
+    void assureThatPersonInsertionWorksCorrectly() throws SQLException {
+        personDao.generateNumberOfRandomPersonsToDB(100);
+        Person person = new Person(0, "John", "Test", new Date(1182054510000L), null);
+        personDao.insertPerson(person);
+        Person personFromDb = personDao.getPersonById(101);
+        assertEquals(person.getFirstName(), personFromDb.getFirstName());
+        assertEquals(person.getLastName(), personFromDb.getLastName());
+        assertEquals("2007-06-17", personFromDb.getBirthDate().toString());
+        assertNotNull(personFromDb.getTimestamp());
+    }
+
+    @Test
+    void assureThatPersonUpdateWorksCorrectly() throws SQLException {
+        personDao.generateNumberOfRandomPersonsToDB(10);
+        Person person = new Person(7, "John", "Test", new Date(1182054510000L), null);
+        personDao.updatePerson(person);
+        Person personFromDb = personDao.getPersonById(7);
+        assertEquals(person.getFirstName(), personFromDb.getFirstName());
+        assertEquals(person.getId(), personFromDb.getId());
+        assertEquals(person.getLastName(), personFromDb.getLastName());
+        assertEquals("2007-06-17", personFromDb.getBirthDate().toString());
+    }
+
+    @Test
+    void assureThatPersonIsDeletedCorrectlyById() throws SQLException {
+        personDao.generateNumberOfRandomPersonsToDB(20);
+        personDao.deletePersonById(20);
+        personDao.deletePersonById(10);
+        assertNull(personDao.getPersonById(20));
+        assertNull(personDao.getPersonById(10));
     }
 }
