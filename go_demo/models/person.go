@@ -20,15 +20,15 @@ type Message struct {
 }
 
 func GetNumberOfPersons(numberOfPersons string) ([]*Person, error) {
-	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM persons LIMIT " + numberOfPersons)
+	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM persons LIMIT $1", numberOfPersons)
 }
 
 func GetAllPersons() ([]*Person, error) {
-	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM persons")
+	return getPersonsByQuery("SELECT id, firstName, lastName, birthDate, timestamp FROM persons", "")
 }
 
-func getPersonsByQuery(sqlQuery string) ([]*Person, error) {
-	personRows, err := db.Query(sqlQuery)
+func getPersonsByQuery(sqlQuery string, numberOfPersons string) ([]*Person, error) {
+	personRows, err := db.Query(sqlQuery, numberOfPersons)
 	if err != nil {
 		return nil, err
 	}
