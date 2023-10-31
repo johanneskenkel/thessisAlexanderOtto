@@ -9,6 +9,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.hbrs.thesis.config.ApplicationConfig;
 import org.hbrs.thesis.jdbc_connections.PostgresJDBC;
@@ -20,6 +23,7 @@ public class PersonDao {
     private ApplicationConfig applicationConfig;
     private PostgresJDBC postgresJDBC;
     private Faker faker = new Faker();
+    private List<Float> expensive;
 
     public PersonDao() {
         this.applicationConfig = new ApplicationConfig();
@@ -38,6 +42,7 @@ public class PersonDao {
                         resultSet.getDate(4), resultSet.getTimestamp(5)));
             }
         }
+        expensive = IntStream.range(0,100000).boxed().map(i -> new Random().nextFloat()).collect(Collectors.toList());
         return persons;
     }
 
